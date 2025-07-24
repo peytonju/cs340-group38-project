@@ -29,12 +29,10 @@ CREATE OR REPLACE TABLE `Villagers` (
 	`villagerName` varchar(100) not null,
 	`birthday` date not null,
 	`homeArea` varchar(100) not null,
-	`partnerPlayerID` int,
 	`assignedFarmID` int,
 
 	-- constraints
 	PRIMARY KEY (`villagerID`),
-	FOREIGN KEY (`partnerPlayerID`) REFERENCES Players (`playerID`),
 	FOREIGN KEY (`assignedFarmID`) REFERENCES Farms (`farmID`)
 );
 
