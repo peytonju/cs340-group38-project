@@ -61,7 +61,7 @@ CREATE OR REPLACE TABLE `GiftHistories` (
 	`givenDate` date not null,
 
 	-- constraints
-	PRIMARY KEY (`playerID`, `villagerID`, `giftID`),
+	PRIMARY KEY (`playerID`, `villagerID`, `giftID`, `givenDate`),
 	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`),
 	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`),
 	FOREIGN KEY (`giftID`) REFERENCES Gifts (`giftID`)
