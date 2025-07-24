@@ -1,7 +1,9 @@
 
 -- #################################################
--- ########## ESSENTIAL TABLES (ENTITIES) ##########
+-- ################# ENTITY TABLES #################
 -- #################################################
+
+-- object table
 CREATE OR REPLACE TABLE `Players` (
 	-- attributes
 	`playerID` int not null auto_increment,
@@ -11,6 +13,7 @@ CREATE OR REPLACE TABLE `Players` (
 	PRIMARY KEY (`playerID`)
 );
 
+-- object table
 CREATE OR REPLACE TABLE `Farms` (
 	-- attributes
 	`farmID` int not null auto_increment,
@@ -23,6 +26,7 @@ CREATE OR REPLACE TABLE `Farms` (
 	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`)
 );
 
+-- object table
 CREATE OR REPLACE TABLE `Villagers` (
 	-- attributes
 	`villagerID` int not null auto_increment,
@@ -36,6 +40,7 @@ CREATE OR REPLACE TABLE `Villagers` (
 	FOREIGN KEY (`assignedFarmID`) REFERENCES Farms (`farmID`)
 );
 
+-- category table
 CREATE OR REPLACE TABLE `Gifts` (
 	-- attributes
 	`giftID` int not null auto_increment,
@@ -47,11 +52,7 @@ CREATE OR REPLACE TABLE `Gifts` (
 	PRIMARY KEY (`giftID`)
 );
 
-
-
--- #################################################
--- ############## TRANSACTION TABLES ###############
--- #################################################
+-- transaction table
 CREATE OR REPLACE TABLE `GiftHistories` (
 	-- attributes
 	`playerID` int not null,
@@ -69,8 +70,10 @@ CREATE OR REPLACE TABLE `GiftHistories` (
 
 
 -- #################################################
--- ############## INTERSECTION TABLES ##############
+-- ############### NON-ENTITY TABLES ###############
 -- #################################################
+
+-- intersection table
 CREATE OR REPLACE TABLE `PlayersVillagersRelationships` (
 	-- attributes
 	`playerID` int not null,
@@ -84,6 +87,7 @@ CREATE OR REPLACE TABLE `PlayersVillagersRelationships` (
 	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`)
 );
 
+-- intersection table
 CREATE OR REPLACE TABLE `VillagersGiftsPreferences` (
 	-- attributes
 	`villagerID` int not null,
