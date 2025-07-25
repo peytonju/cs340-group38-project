@@ -1,4 +1,11 @@
 -- #################################################
+-- ################# STARDEW VALLEY DDL ############
+-- #################################################
+
+SET FOREIGN_KEY_CHECKS = 0;
+SET AUTOCOMMIT = 0;
+
+-- #################################################
 -- ################## TABLE DROPS ##################
 -- #################################################
 
@@ -174,3 +181,6 @@ VALUES
   (2, 1, 'love'),  -- Sebastian loves Amethyst
   (3, 1, 'love'),  -- Abigail loves Amethyst
   (3, 4, 'like');  -- Abigail likes Chocolate Cake
+
+SET FOREIGN_KEY_CHECKS = 1;
+COMMIT;
