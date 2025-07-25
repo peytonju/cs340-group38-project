@@ -31,7 +31,8 @@ CREATE OR REPLACE TABLE `Villagers` (
 	-- attributes
 	`villagerID` int not null auto_increment,
 	`villagerName` varchar(100) not null,
-	`birthday` date not null,
+	`birthdaySeason` varchar(10) not null,
+	`birthdayDay` tinyint unsigned not null,
 	`homeArea` varchar(100) not null,
 	`assignedFarmID` int,
 
