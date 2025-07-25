@@ -1,10 +1,24 @@
+-- #################################################
+-- ################## TABLE DROPS ##################
+-- #################################################
+
+-- entities
+DROP TABLE IF EXISTS `Players`;
+DROP TABLE IF EXISTS `Farms`;
+DROP TABLE IF EXISTS `Villagers`;
+DROP TABLE IF EXISTS `Gifts`;
+DROP TABLE IF EXISTS `GiftHistories`;
+
+-- intersection tables
+DROP TABLE IF EXISTS `PlayersVillagersRelationships`;
+DROP TABLE IF EXISTS `VillagersGiftsPreferences`;
 
 -- #################################################
 -- ################# ENTITY TABLES #################
 -- #################################################
 
 -- object table
-CREATE OR REPLACE TABLE `Players` (
+CREATE TABLE `Players` (
 	-- attributes
 	`playerID` int not null auto_increment,
 	`playerName` varchar(100) not null,
@@ -14,7 +28,7 @@ CREATE OR REPLACE TABLE `Players` (
 );
 
 -- object table
-CREATE OR REPLACE TABLE `Farms` (
+CREATE TABLE `Farms` (
 	-- attributes
 	`farmID` int not null auto_increment,
 	`playerID` int not null unique,
@@ -27,7 +41,7 @@ CREATE OR REPLACE TABLE `Farms` (
 );
 
 -- object table
-CREATE OR REPLACE TABLE `Villagers` (
+CREATE TABLE `Villagers` (
 	-- attributes
 	`villagerID` int not null auto_increment,
 	`villagerName` varchar(100) not null,
@@ -42,7 +56,7 @@ CREATE OR REPLACE TABLE `Villagers` (
 );
 
 -- category table
-CREATE OR REPLACE TABLE `Gifts` (
+CREATE TABLE `Gifts` (
 	-- attributes
 	`giftID` int not null auto_increment,
 	`giftName` varchar(100) not null,
@@ -54,7 +68,7 @@ CREATE OR REPLACE TABLE `Gifts` (
 );
 
 -- transaction table
-CREATE OR REPLACE TABLE `GiftHistories` (
+CREATE TABLE `GiftHistories` (
 	-- attributes
 	`playerID` int not null,
 	`villagerID` int not null,
@@ -75,7 +89,7 @@ CREATE OR REPLACE TABLE `GiftHistories` (
 -- #################################################
 
 -- intersection table
-CREATE OR REPLACE TABLE `PlayersVillagersRelationships` (
+CREATE TABLE `PlayersVillagersRelationships` (
 	-- attributes
 	`playerID` int not null,
 	`villagerID` int not null,
@@ -89,7 +103,7 @@ CREATE OR REPLACE TABLE `PlayersVillagersRelationships` (
 );
 
 -- intersection table
-CREATE OR REPLACE TABLE `VillagersGiftsPreferences` (
+CREATE TABLE `VillagersGiftsPreferences` (
 	-- attributes
 	`villagerID` int not null,
 	`giftID` int not null,
