@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 function send_ddl(db) {
-	const DDL = fs.readFileSync("../ddl.sql", "utf8");
+	const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
 	db.query(DDL);
 }
 
