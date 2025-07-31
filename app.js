@@ -17,6 +17,7 @@ const PORT = 2; /* port this express server will be hosted on. */
 app.engine("handlebars", express_handlebars.engine({
 	/* as specified by layouts/index.handlebars */
 	defaultLayout: "layouts_index",
+	partialsDir: path.join(__dirname, "views", "partials"),
 	helpers
 }));
 app.set("view engine", "handlebars");
