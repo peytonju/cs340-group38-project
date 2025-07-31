@@ -23,37 +23,37 @@ app.use(express.urlencoded({
 	extended: true
 }));
 
+
+const URL_TO_TABLE_NAME = {
+	"players": "Players",
+	"villagers": "Villagers",
+	"farms": "Farms",
+	"gifts": "Gifts",
+	"gifthistories": "GiftHistories",
+	"playersvillagersrelationships": "PlayersVillagersRelationships",
+	"villagersgiftspreferences": "VillagersGiftsPreferences"
+}
+
+
 /**************************************************************************** ROUTES */
 app.get("/", async function (req, res) {
 	res.status(200).render("pages_root");
 });
 
-app.get("/players", async function (req, res) {
-	res.status(200).render("pages_players");
-});
+app.get("/tables/:db_tablename", async function (req, res) {
+	const URL_TABLE_NAME = (req.params.db_tablename).toLowerCase();
+	const TABLE_NAME = (URL_TABLE_NAME in URL_TO_TABLE_NAME) ? URL_TO_TABLE_NAME[URL_TABLE_NAME] : null;
 
-app.get("/farms", async function (req, res) {
-	res.status(200).render("pages_farms");
-});
-
-app.get("/villagers", async function (req, res) {
-	res.status(200).render("pages_villagers");
-});
-
-app.get("/gifts", async function (req, res) {
-	res.status(200).render("pages_gifts");
-});
-
-app.get("/gifthistories", async function (req, res) {
-	res.status(200).render("pages_gifthistories");
-});
-
-app.get("/playersvillagersrelationships", async function (req, res) {
-	res.status(200).render("pages_playersvillagersrelationships");
-});
-
-app.get("/villagersgiftspreferences", async function (req, res) {
-	res.status(200).render("pages_villagersgiftspreferences");
+	if (TABLE_NAME) {
+		try {
+			console.log(await sql_util.fetch_full_table(db, TABLE_NAME));
+			res.status(200).render(`pages_${URL_TABLE_NAME}`);
+		} catch (error) {
+			res.status(404).send("Desired table does not exist!");
+		}
+	} else {
+		res.status(404).send("Table specified in the URL does not have a translation!");
+	}
 });
 
 app.get("/send_ddl", async function (req, res) {

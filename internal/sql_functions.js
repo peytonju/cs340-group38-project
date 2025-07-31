@@ -5,10 +5,15 @@ function send_ddl(db) {
 	db.query(DDL);
 }
 
+function fetch_full_table(db, tablename) {
+	return db.query(`SELECT * FROM ${tablename};`);
+}
+
 
 
 
 module.exports = {
-	send_ddl
+	send_ddl,
+	fetch_full_table
 };
 
