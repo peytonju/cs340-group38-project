@@ -1,1 +1,28 @@
-page gifts
+<h1>Gifts</h1>
+
+<table>
+  <thead><tr><th>ID</th><th>Name</th><th>Value</th><th>Delete</th></tr></thead>
+  <tbody>
+    {{#each gifts}}
+      <tr>
+        <td>{{giftID}}</td>
+        <td>{{giftName}}</td>
+        <td>{{value}}</td>
+        <td>
+          <form method="post" action="/gifts/delete/{{giftID}}" style="display:inline;">
+            <button aria-label="Delete {{giftName}}">Remove gift</button>
+          </form>
+        </td>
+      </tr>
+    {{else}}
+      <tr><td colspan="4">No gifts.</td></tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Add Gift</h2>
+<form method="post" action="/gifts">
+  <input name="giftName" placeholder="Gift name" required />
+  <input name="value" type="number" min="0" placeholder="Value" required />
+  <button>Add</button>
+</form>

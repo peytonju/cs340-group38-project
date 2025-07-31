@@ -1,1 +1,34 @@
-page gifthistories
+<h1>Gift History</h1>
+
+<table>
+  <thead>
+    <tr><th>ID</th><th>Date</th><th>Player</th><th>Villager</th><th>Gift</th><th>Delete</th></tr>
+  </thead>
+  <tbody>
+    {{#each giftHistories}}
+      <tr>
+        <td>{{giftHistoryID}}</td>
+        <td>{{giftDate}}</td>
+        <td>{{player.playerName}}</td>
+        <td>{{villager.villagerName}}</td>
+        <td>{{gift.giftName}}</td>
+        <td>
+          <form method="post" action="/giftHistories/delete/{{giftHistoryID}}" style="display:inline;">
+            <button aria-label="Delete record">Remove record</button>
+          </form>
+        </td>
+      </tr>
+    {{else}}
+      <tr><td colspan="6">No gift history.</td></tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Record Gift</h2>
+<form method="post" action="/giftHistories">
+  <!-- date -->
+  <input type="date" name="giftDate" required />
+
+  <!-- player dropdown -->
+  <select name="playerID" required>
+    <option disabled selected>Player…

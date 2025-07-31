@@ -1,1 +1,38 @@
-page villagers
+<h1>Villagers</h1>
+
+<table>
+  <thead><tr><th>ID</th><th>Name</th><th>Birthday</th><th>Home</th><th>Farm</th><th>Delete</th></tr></thead>
+  <tbody>
+    {{#each villagers}}
+      <tr>
+        <td>{{villagerID}}</td>
+        <td>{{villagerName}}</td>
+        <td>{{birthdaySeason}} {{birthdayDay}}</td>
+        <td>{{homeArea}}</td>
+        <td>{{farmName}}</td>
+        <td>
+          <form method="post" action="/villagers/delete/{{villagerID}}" style="display:inline;">
+            <button aria-label="Delete {{villagerName}}">Remove villager</button>
+          </form>
+        </td>
+      </tr>
+    {{else}}
+      <tr><td colspan="6">No villagers.</td></tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Add Villager</h2>
+<form method="post" action="/villagers">
+  <input name="villagerName" placeholder="Name" required />
+  <select name="birthdaySeason" required>
+    <option disabled selected>Season…</option>
+    <option>Spring</option><option>Summer</option><option>Fall</option><option>Winter</option>
+  </select>
+  <input name="birthdayDay" type="number" min="1" max="28" placeholder="Day" required />
+  <input name="homeArea" placeholder="Home area" />
+  <select name="farmID"><option value="">No farm</option>
+    {{#each farms}}<option value="{{farmID}}">{{farmName}}</option>{{/each}}
+  </select>
+  <button>Add</button>
+</form>

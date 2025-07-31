@@ -1,1 +1,37 @@
-page farms
+<h1>Farms</h1>
+
+<table>
+  <thead><tr><th>ID</th><th>Owner</th><th>Name</th><th>Type</th><th>Delete</th></tr></thead>
+  <tbody>
+    {{#each farms}}
+      <tr>
+        <td>{{farmID}}</td>
+        <td>{{owner.playerName}}</td>
+        <td>{{farmName}}</td>
+        <td>{{farmType}}</td>
+        <td>
+          <form method="post" action="/farms/delete/{{farmID}}" style="display:inline;">
+            <button aria-label="Delete farm {{farmName}}">Remove farm</button>
+          </form>
+        </td>
+      </tr>
+    {{else}}
+      <tr><td colspan="5">No farms.</td></tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Add Farm</h2>
+<form method="post" action="/farms">
+  <input name="farmName" placeholder="Farm name" required />
+  <select name="playerID" required>
+    <option disabled selected>Owner…</option>
+    {{#each players}}<option value="{{playerID}}">{{playerName}}</option>{{/each}}
+  </select>
+  <select name="farmType" required>
+    <option disabled selected>Type…</option>
+    <option>Standard</option><option>Riverland</option>
+    <option>Forest</option><option>Hill-top</option>
+  </select>
+  <button>Add</button>
+</form>
