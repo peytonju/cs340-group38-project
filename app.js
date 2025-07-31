@@ -5,6 +5,7 @@ const express = require("express");
 const express_handlebars = require("express-handlebars");
 const path = require("path")
 const sql_util = require("./internal/sql_functions");
+const { helpers } = require("./helpers/hbs");
 
 /* CONSTANTS */
 const app = express(); /* express app */
@@ -15,9 +16,11 @@ const PORT = 2; /* port this express server will be hosted on. */
 /* HANDLEBARS SETUP */
 app.engine("handlebars", express_handlebars.engine({
 	/* as specified by layouts/index.handlebars */
-	defaultLayout: "layouts_index"
+	defaultLayout: "layouts_index",
+	helpers
 }));
 app.set("view engine", "handlebars");
+app.set()
 app.use(express.static("public"));
 app.use(express.urlencoded({
 	extended: true

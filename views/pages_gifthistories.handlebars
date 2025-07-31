@@ -1,34 +1,47 @@
+{{!-- giftHistories.handlebars (add / list / delete) --}}
 <h1>Gift History</h1>
 
 <table>
   <thead>
-    <tr><th>ID</th><th>Date</th><th>Player</th><th>Villager</th><th>Gift</th><th>Delete</th></tr>
+    <tr><th>Date</th><th>Player</th><th>Villager</th><th>Gift</th><th>Delete</th></tr>
   </thead>
   <tbody>
     {{#each giftHistories}}
       <tr>
-        <td>{{giftHistoryID}}</td>
-        <td>{{giftDate}}</td>
+        <td>{{givenDate}}</td>
         <td>{{player.playerName}}</td>
         <td>{{villager.villagerName}}</td>
         <td>{{gift.giftName}}</td>
         <td>
-          <form method="post" action="/giftHistories/delete/{{giftHistoryID}}" style="display:inline;">
-            <button aria-label="Delete record">Remove record</button>
+          <form method="post" action="/giftHistories/delete/{{playerID}}/{{villagerID}}/{{giftID}}/{{givenDate}}" style="display:inline;">
+            <button type="submit">Delete</button>
           </form>
         </td>
       </tr>
     {{else}}
-      <tr><td colspan="6">No gift history.</td></tr>
+      <tr><td colspan="5">No gift history.</td></tr>
     {{/each}}
   </tbody>
 </table>
 
 <h2>Record Gift</h2>
 <form method="post" action="/giftHistories">
-  <!-- date -->
-  <input type="date" name="giftDate" required />
+  <input type="date" name="givenDate" required />
 
-  <!-- player dropdown -->
   <select name="playerID" required>
-    <option disabled selected>Player…
+    <option disabled selected>Player…</option>
+    {{#each players}}<option value="{{playerID}}">{{playerName}}</option>{{/each}}
+  </select>
+
+  <select name="villagerID" required>
+    <option disabled selected>Villager…</option>
+    {{#each villagers}}<option value="{{villagerID}}">{{villagerName}}</option>{{/each}}
+  </select>
+
+  <select name="giftID" required>
+    <option disabled selected>Gift…</option>
+    {{#each gifts}}<option value="{{giftID}}">{{giftName}}</option>{{/each}}
+  </select>
+
+  <button type="submit">Add</button>
+</form>

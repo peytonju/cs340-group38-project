@@ -1,29 +1,27 @@
+{{!-- players.handlebars (add / list / delete) --}}
 <h1>Players</h1>
 
 <table>
-  <thead>
-    <tr><th>ID</th><th>Name</th><th>Edit</th><th>Delete</th></tr>
-  </thead>
+  <thead><tr><th>ID</th><th>Name</th><th>Delete</th></tr></thead>
   <tbody>
     {{#each players}}
       <tr>
         <td>{{playerID}}</td>
         <td>{{playerName}}</td>
-        <td><a href="/players/edit/{{playerID}}">Add Player</a></td>
         <td>
           <form method="post" action="/players/delete/{{playerID}}" style="display:inline;">
-            <button aria-label="Delete {{playerName}}">Remove Player</button>
+            <button type="submit">Delete</button>
           </form>
         </td>
       </tr>
     {{else}}
-      <tr><td colspan="4">No players yet.</td></tr>
+      <tr><td colspan="3">No players.</td></tr>
     {{/each}}
   </tbody>
 </table>
 
 <h2>Add Player</h2>
 <form method="post" action="/players">
-  <label>Name <input name="playerName" required /></label>
-  <button>Add</button>
+  <input name="playerName" placeholder="Name" required />
+  <button type="submit">Add</button>
 </form>

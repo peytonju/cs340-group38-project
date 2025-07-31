@@ -1,23 +1,45 @@
+{{!-- villagers.handlebars (full CRUD) --}}
 <h1>Villagers</h1>
 
 <table>
-  <thead><tr><th>ID</th><th>Name</th><th>Birthday</th><th>Home</th><th>Farm</th><th>Delete</th></tr></thead>
+  <thead>
+    <tr><th>ID</th><th>Name</th><th>Birthday</th><th>Home</th><th>Farm</th><th>Save</th><th>Delete</th></tr>
+  </thead>
   <tbody>
     {{#each villagers}}
       <tr>
-        <td>{{villagerID}}</td>
-        <td>{{villagerName}}</td>
-        <td>{{birthdaySeason}} {{birthdayDay}}</td>
-        <td>{{homeArea}}</td>
-        <td>{{farmName}}</td>
+        <form method="post" action="/villagers/update/{{villagerID}}">
+          <td>{{villagerID}}</td>
+          <td><input name="villagerName" value="{{villagerName}}" required /></td>
+          <td>
+            <select name="birthdaySeason">
+              {{#each ../seasons}}
+                <option {{#if (eq this ../birthdaySeason)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+            </select>
+            <input type="number" name="birthdayDay" min="1" max="28" value="{{birthdayDay}}" required style="width:4em" />
+          </td>
+          <td><input name="homeArea" value="{{homeArea}}" /></td>
+          <td>
+            <select name="assignedFarmID">
+              <option value="">— None —</option>
+              {{#each ../farms}}
+                <option value="{{farmID}}" {{#if (eq farmID ../assignedFarmID)}}selected{{/if}}>
+                  {{farmName}}
+                </option>
+              {{/each}}
+            </select>
+          </td>
+          <td><button type="submit">Save</button></td>
+        </form>
         <td>
           <form method="post" action="/villagers/delete/{{villagerID}}" style="display:inline;">
-            <button aria-label="Delete {{villagerName}}">Remove villager</button>
+            <button type="submit">Delete</button>
           </form>
         </td>
       </tr>
     {{else}}
-      <tr><td colspan="6">No villagers.</td></tr>
+      <tr><td colspan="7">No villagers.</td></tr>
     {{/each}}
   </tbody>
 </table>
@@ -26,13 +48,14 @@
 <form method="post" action="/villagers">
   <input name="villagerName" placeholder="Name" required />
   <select name="birthdaySeason" required>
-    <option disabled selected>Season…</option>
-    <option>Spring</option><option>Summer</option><option>Fall</option><option>Winter</option>
+    {{#each seasons}}<option>{{this}}</option>{{/each}}
   </select>
-  <input name="birthdayDay" type="number" min="1" max="28" placeholder="Day" required />
+  <input type="number" name="birthdayDay" min="1" max="28" placeholder="Day" required style="width:4em" />
   <input name="homeArea" placeholder="Home area" />
-  <select name="farmID"><option value="">No farm</option>
+  <select name="assignedFarmID">
+    <option value="">— None —</option>
     {{#each farms}}<option value="{{farmID}}">{{farmName}}</option>{{/each}}
   </select>
-  <button>Add</button>
+  <button type="submit">Add</button>
 </form>
+{{!-- Note: Ensure that the seasons and farms context variables are passed to this template from the server --}}

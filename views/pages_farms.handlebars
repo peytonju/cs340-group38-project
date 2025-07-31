@@ -1,22 +1,42 @@
+{{!-- farms.handlebars (full CRUD) --}}
 <h1>Farms</h1>
 
 <table>
-  <thead><tr><th>ID</th><th>Owner</th><th>Name</th><th>Type</th><th>Delete</th></tr></thead>
+  <thead>
+    <tr><th>ID</th><th>Owner</th><th>Name</th><th>Type</th><th>Save</th><th>Delete</th></tr>
+  </thead>
   <tbody>
     {{#each farms}}
       <tr>
-        <td>{{farmID}}</td>
-        <td>{{owner.playerName}}</td>
-        <td>{{farmName}}</td>
-        <td>{{farmType}}</td>
+        <form method="post" action="/farms/update/{{farmID}}">
+          <td>{{farmID}}</td>
+          <td>
+            <select name="playerID">
+              {{#each ../players}}
+                <option value="{{playerID}}" {{#if (eq playerID ../owner.playerID)}}selected{{/if}}>
+                  {{playerName}}
+                </option>
+              {{/each}}
+            </select>
+          </td>
+          <td><input name="farmName" value="{{farmName}}" required /></td>
+          <td>
+            <select name="farmType">
+              {{#each ../availableTypes}}
+                <option {{#if (eq this ../farmType)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+            </select>
+          </td>
+          <td><button type="submit">Save</button></td>
+        </form>
         <td>
           <form method="post" action="/farms/delete/{{farmID}}" style="display:inline;">
-            <button aria-label="Delete farm {{farmName}}">Remove farm</button>
+            <button type="submit">Delete</button>
           </form>
         </td>
       </tr>
     {{else}}
-      <tr><td colspan="5">No farms.</td></tr>
+      <tr><td colspan="6">No farms.</td></tr>
     {{/each}}
   </tbody>
 </table>
@@ -29,9 +49,7 @@
     {{#each players}}<option value="{{playerID}}">{{playerName}}</option>{{/each}}
   </select>
   <select name="farmType" required>
-    <option disabled selected>Type…</option>
-    <option>Standard</option><option>Riverland</option>
-    <option>Forest</option><option>Hill-top</option>
+    {{#each availableTypes}}<option>{{this}}</option>{{/each}}
   </select>
-  <button>Add</button>
+  <button type="submit">Add</button>
 </form>
