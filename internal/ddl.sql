@@ -45,7 +45,7 @@ CREATE TABLE `Farms` (
 
 	-- constraints
 	PRIMARY KEY (`farmID`),
-	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`)
+	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`) ON DELETE CASCADE
 );
 
 -- object table
@@ -60,7 +60,7 @@ CREATE TABLE `Villagers` (
 
 	-- constraints
 	PRIMARY KEY (`villagerID`),
-	FOREIGN KEY (`assignedFarmID`) REFERENCES Farms (`farmID`)
+	FOREIGN KEY (`assignedFarmID`) REFERENCES Farms (`farmID`) ON DELETE CASCADE
 );
 
 -- category table
@@ -85,9 +85,9 @@ CREATE TABLE `GiftHistories` (
 
 	-- constraints
 	PRIMARY KEY (`playerID`, `villagerID`, `giftID`, `givenDate`),
-	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`),
-	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`),
-	FOREIGN KEY (`giftID`) REFERENCES Gifts (`giftID`)
+	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`) ON DELETE CASCADE,
+	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`) ON DELETE CASCADE,
+	FOREIGN KEY (`giftID`) REFERENCES Gifts (`giftID`) ON DELETE CASCADE
 );
 
 
@@ -105,8 +105,8 @@ CREATE TABLE `PlayersVillagersRelationships` (
 
 	-- constraints
 	PRIMARY KEY (`playerID`, `villagerID`),
-	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`),
-	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`)
+	FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`) ON DELETE CASCADE,
+	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`) ON DELETE CASCADE
 );
 
 -- intersection table
@@ -118,8 +118,8 @@ CREATE TABLE `VillagersGiftsPreferences` (
 
 	-- constraints
 	PRIMARY KEY (`villagerID`, `giftID`),
-	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`),
-	FOREIGN KEY (`giftID`) REFERENCES Gifts (`giftID`)
+	FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`) ON DELETE CASCADE,
+	FOREIGN KEY (`giftID`) REFERENCES Gifts (`giftID`) ON DELETE CASCADE
 );
 
 
