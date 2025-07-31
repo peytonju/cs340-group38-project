@@ -10,7 +10,7 @@ const { helpers } = require("./helpers/hbs");
 /* CONSTANTS */
 const app = express(); /* express app */
 const db = require("./internal/database_connection_details"); /* database. send queries here. */
-const PORT = 2; /* port this express server will be hosted on. */
+const PORT = 41394; /* port this express server will be hosted on. */
 
 
 /* HANDLEBARS SETUP */
@@ -36,7 +36,7 @@ const URL_TO_TABLE_NAME = {
 	"gifthistories": "GiftHistories",
 	"playersvillagersrelationships": "PlayersVillagersRelationships",
 	"villagersgiftspreferences": "VillagersGiftsPreferences"
-}
+};
 
 
 /**************************************************************************** ROUTES */
@@ -50,8 +50,11 @@ app.get("/tables/:db_tablename", async function (req, res) {
 
 	if (TABLE_NAME) {
 		try {
-			console.log(await sql_util.fetch_full_table(db, TABLE_NAME));
-			res.status(200).render(`pages_${URL_TABLE_NAME}`);
+			const TABLE_DATA = (await sql_util.fetch_full_table(db, TABLE_NAME));
+			console.log(TABLE_DATA[0]);
+			res.status(200).render(`pages_${URL_TABLE_NAME}`, {
+				[TABLE_NAME]: TABLE_DATA[0]
+			});
 		} catch (error) {
 			res.status(404).send("Desired table does not exist!");
 		}
