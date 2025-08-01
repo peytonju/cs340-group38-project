@@ -144,58 +144,88 @@ CREATE TABLE `VillagersGiftsPreferences` (
 
 -- 1) Players
 INSERT INTO `Players` (`playerName`) VALUES
-  ('Ringo'),
-  ('John'),
-  ('Paul');
+ ('Ringo'),
+ ('John'),
+ ('Paul');
 
 -- 2) Farms (one per player)
 INSERT INTO `Farms` (`playerID`,`farmName`,`farmType`) VALUES
-  (1, 'Yellow Submarine', 'Standard'),
-  (2, 'Lake District',    'Riverland'),
-  (3, 'Abbey Orchard',    'Forest');
+ ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 'Yellow Submarine', 'Standard'),
+ ((SELECT playerID FROM Players WHERE playerName = 'John'), 'Lake District', 'Riverland'),
+ ((SELECT playerID FROM Players WHERE playerName = 'Paul'), 'Abbey Orchard', 'Forest');
 
--- 3) Villagers (A farm with multiple villagers: Haley & Jas on Farm 1)
+-- 3) Villagers (A farm with multiple villagers: Haley & Jas on Farm 1)
 INSERT INTO `Villagers`
-  (`villagerName`,`birthdaySeason`,`birthdayDay`,`homeArea`,`assignedFarmID`)
+ (`villagerName`,`birthdaySeason`,`birthdayDay`,`homeArea`,`assignedFarmID`)
 VALUES
-  ('Haley',      'Spring', 14, 'Pelican Town',     1),
-  ('Jas',        'Summer',  4, 'Pelican Town',     1),
-  ('Sebastian',  'Winter', 10, 'The Mountain',     2),
-  ('Abigail',    'Fall',   13, 'Pelican Town',     3);
+ ('Haley', 'Spring', 14, 'Pelican Town', (SELECT farmID FROM Farms WHERE farmName = 'Yellow Submarine')),
+ ('Jas', 'Summer', 4, 'Pelican Town', (SELECT farmID FROM Farms WHERE farmName = 'Yellow Submarine')),
+ ('Sebastian', 'Winter', 10, 'The Mountain', (SELECT farmID FROM Farms WHERE farmName = 'Lake District')),
+ ('Abigail', 'Fall', 13, 'Pelican Town', (SELECT farmID FROM Farms WHERE farmName = 'Abbey Orchard'));
 
 -- 4) Gifts (5 sample gifts)
 INSERT INTO `Gifts` (`giftName`,`value`,`seasonAvailable`) VALUES
-  ('Amethyst',      120.00, 'Winter'),
-  ('Pumpkin',        60.00, 'Fall'),
-  ('Pepper Poppers', 40.00, 'Summer'),
-  ('Chocolate Cake', 75.00, NULL),
-  ('Coconut',        75.00, 'Summer');
+ ('Amethyst', 120.00, 'Winter'),
+ ('Pumpkin', 60.00, 'Fall'),
+ ('Pepper Poppers', 40.00, 'Summer'),
+ ('Chocolate Cake', 75.00, NULL),
+ ('Coconut', 75.00, 'Summer');
 
--- 5) GiftHistories (Haley gets two gifts to show 1:M)
+-- 5) GiftHistories (Haley gets two gifts)
 INSERT INTO `GiftHistories` (`playerID`,`villagerID`,`giftID`,`givenDate`) VALUES
-  (1, 1, 5, '2025-04-14'),  -- Ringo → Haley (Coconut on Spring 14)
-  (1, 1, 3, '2025-05-01'),  -- Ringo → Haley (Pepper Poppers on 2025‑05‑01)
-  (2, 3, 1, '2025-12-10'),  -- John  → Sebastian (Amethyst on Winter 10)
-  (3, 4, 1, '2025-10-13');  -- Paul  → Abigail (Amethyst on Fall 13)
+ ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Coconut'), 
+  '2025-04-14'), -- Ringo → Haley (Coconut on Spring 14)
+ ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Pepper Poppers'), 
+  '2025-05-01'), -- Ringo → Haley (Pepper Poppers on 2025‑05‑01)
+ ((SELECT playerID FROM Players WHERE playerName = 'John'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Sebastian'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Amethyst'), 
+  '2025-12-10'), -- John → Sebastian (Amethyst on Winter 10)
+ ((SELECT playerID FROM Players WHERE playerName = 'Paul'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Amethyst'), 
+  '2025-10-13'); -- Paul → Abigail (Amethyst on Fall 13)
 
--- 6) PlayersVillagersRelationships (Ringo knows two villagers, showing M:M)
+-- 6) PlayersVillagersRelationships (Ringo knows two villagers)
 INSERT INTO `PlayersVillagersRelationships`
-  (`playerID`,`villagerID`,`friendshipLevel`,`relationshipLevel`)
+ (`playerID`,`villagerID`,`friendshipLevel`,`relationshipLevel`)
 VALUES
-  (1, 1, 3, 'friend'),         -- Ringo & Haley
-  (1, 4, 1, 'acquaintance'),   -- Ringo & Abigail
-  (2, 3, 5, 'friend'),         -- John & Sebastian
-  (3, 4, 8, 'best friend');    -- Paul & Abigail
+ ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
+  3, 'friend'), -- Ringo & Haley
+ ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
+  1, 'acquaintance'), -- Ringo & Abigail
+ ((SELECT playerID FROM Players WHERE playerName = 'John'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Sebastian'), 
+  5, 'friend'), -- John & Sebastian
+ ((SELECT playerID FROM Players WHERE playerName = 'Paul'), 
+  (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
+  8, 'best friend'); -- Paul & Abigail
 
--- 7) VillagersGiftsPreferences (Villagers can prefer multiple gifts, gifts can appear for multiple villagers)
+-- 7) VillagersGiftsPreferences
 INSERT INTO `VillagersGiftsPreferences`
-  (`villagerID`,`giftID`,`preference`)
+ (`villagerID`,`giftID`,`preference`)
 VALUES
-  (1, 5, 'love'),  -- Haley loves Coconut
-  (1, 1, 'like'),  -- Haley likes Amethyst
-  (2, 1, 'love'),  -- Sebastian loves Amethyst
-  (3, 1, 'love'),  -- Abigail loves Amethyst
-  (3, 4, 'like');  -- Abigail likes Chocolate Cake
+ ((SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Coconut'), 
+  'love'), -- Haley loves Coconut
+ ((SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Amethyst'), 
+  'like'), -- Haley likes Amethyst
+ ((SELECT villagerID FROM Villagers WHERE villagerName = 'Sebastian'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Amethyst'), 
+  'love'), -- Sebastian loves Amethyst
+ ((SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Amethyst'), 
+  'love'), -- Abigail loves Amethyst
+ ((SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
+  (SELECT giftID FROM Gifts WHERE giftName = 'Chocolate Cake'), 
+  'like'); -- Abigail likes Chocolate Cake
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
