@@ -38,9 +38,9 @@ INSERT INTO `Gifts` (`giftName`, `value`, `seasonAvailable`)
 -- ##### update
 UPDATE `Gifts`
     SET
-        `giftName` = varchar, `value` = decimal, `seasonAvailable` = varchar
+        'giftName' = varchar, 'value' = decimal, 'seasonAvailable' = varchar
     WHERE
-        `giftID` = int
+        'giftID' = int
 
 -- ##### delete
 DELETE FROM Gifts
@@ -58,9 +58,9 @@ INSERT INTO `Villagers` (`villagerName`, `birthdaySeason`, `birthdayDay`, `homeA
 -- ##### update
 UPDATE `Villagers`
     SET
-        `villagerName` = varchar, `birthdaySeason` = varchar, `birthdayDay` = int, `homeArea` = varchar, `assignedFarmID` = int
+        'villagerName' = varchar, 'birthdaySeason' = varchar, 'birthdayDay' = int, 'homeArea' = varchar, 'assignedFarmID' = int
     WHERE
-        `villagerID` = int
+        'villagerID' = int
 
 -- ##### delete
 DELETE FROM Villagers
@@ -78,14 +78,14 @@ INSERT INTO `Farms` (`playerID`, `farmName`, `farmType`)
 -- ##### update
 UPDATE Farms
     SET
-        `playerID` = int, `farmName` = varchar, `farmType` = varchar
+        'playerID' = int, 'farmName' = varchar, 'farmType' = varchar
     WHERE
         'farmID' = int
 
 -- One-to-one relationship with players, so the player ID also uniquely identifies the farm.
 UPDATE `Farms`
     SET
-        `playerID` = int, `farmName` = varchar, `farmType` = varchar
+        'playerID' = int, 'farmName' = varchar, 'farmType' = varchar
     WHERE
         'playerID' = int
 
