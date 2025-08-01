@@ -4,6 +4,7 @@
 -- #####                                        #####
 -- #####            Stardew Valley:             #####
 -- #####     Pelican Town Social Registry       #####
+-- ####              DDL Queries		 		#####
 -- ##################################################
 
 -- ############################################
@@ -14,7 +15,7 @@
 
 
 -- #################################################
--- ################# STARDEW VALLEY DDL ############
+-- ############## STARDEW VALLEY DDL ###############
 -- #################################################
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -139,14 +140,14 @@ CREATE TABLE `VillagersGiftsPreferences` (
 
 
 -- ####################################################
--- ################# INSERTION SCRIPTS #################
+-- ################ INSERTION SCRIPTS #################
 -- ####################################################
 
 -- 1) Players
-INSERT INTO `Players` (`playerName`) VALUES
- ('Ringo'),
- ('John'),
- ('Paul');
+INSERT INTO `Players` (`playerID`, `playerName`) VALUES
+  (1, 'Ringo'),
+  (2, 'John'),
+  (3, 'Paul');
 
 -- 2) Farms (one per player)
 INSERT INTO `Farms` (`playerID`,`farmName`,`farmType`) VALUES
