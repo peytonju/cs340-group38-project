@@ -48,13 +48,13 @@
 <form method="post" action="/tables/villagers/insert">
   <input name="villagerName" placeholder="Name" required />
   <select name="birthdaySeason" required>
-    {{#each seasons}}<option>{{this}}</option>{{/each}}
+    {{#each SEASONS}}<option>{{this}}</option>{{/each}}
   </select>
   <input type="number" name="birthdayDay" min="1" max="28" placeholder="Day" required style="width:4em" />
   <input name="homeArea" placeholder="Home area" />
   <select name="assignedFarmID">
     <option value="">— None —</option>
-    {{#each farms}}<option value="{{farmID}}">{{farmName}}</option>{{/each}}
+    {{#each Farms}}<option value="{{farmID}}">{{farmName}}</option>{{/each}}
   </select>
   <button type="submit">Add</button>
 </form>
