@@ -1,3 +1,18 @@
+-- ##################################################
+-- ##### Justice Peyton, Zachary Wilkins-Olson 	#####
+-- ##### CS340                                  #####
+-- #####                                        #####
+-- #####            Stardew Valley:             #####
+-- #####     Pelican Town Social Registry       #####
+-- ##################################################
+
+-- ############################################
+-- ##### Brief Description of the project #####
+-- ############################################
+-- This project is a social registry for Stardew Valley, focusing on the relationships between players, villagers, and gifts.
+-- It includes tables for players, farms, villagers, gifts, gift histories, and relationships between players and villagers.
+
+
 -- #################################################
 -- ################# STARDEW VALLEY DDL ############
 -- #################################################
