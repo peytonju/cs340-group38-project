@@ -1,5 +1,7 @@
 const helpers = {
-  eq: (a, b) => a === b
+  eq: function(a, b) {
+    return a === b;
+  }
 };
 
 module.exports = { helpers };

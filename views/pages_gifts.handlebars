@@ -6,14 +6,14 @@
   <tbody>
     {{#each Gifts}}
       <tr>
-        <form method="post" action="/gifts/update/{{giftID}}">
+        <form method="post" action="/tables/gifts/update/{{giftID}}">
           <td>{{giftID}}</td>
           <td><input name="giftName" value="{{giftName}}" required /></td>
           <td><input name="value" type="number" min="0" value="{{value}}" required /></td>
           <td><button type="submit">Save</button></td>
         </form>
         <td>
-          <form method="post" action="/gifts/delete/{{giftID}}" style="display:inline;">
+          <form method="post" action="/tables/gifts/delete/{{giftID}}" style="display:inline;">
             <button type="submit">Delete</button>
           </form>
         </td>
@@ -25,7 +25,7 @@
 </table>
 
 <h2>Add Gift</h2>
-<form method="post" action="/gifts">
+<form method="post" action="/tables/gifts/insert">
   <input name="giftName" placeholder="Gift name" required />
   <input name="value" type="number" min="0" placeholder="Value" required />
   <button type="submit">Add</button>

@@ -28,15 +28,19 @@ app.use(express.urlencoded({
 }));
 
 
-const URL_TO_TABLE_NAME = {
-	"players": "Players",
-	"villagers": "Villagers",
-	"farms": "Farms",
-	"gifts": "Gifts",
-	"gifthistories": "GiftHistories",
-	"playersvillagersrelationships": "PlayersVillagersRelationships",
-	"villagersgiftspreferences": "VillagersGiftsPreferences"
+/* contains relevant tables needed for a specific URL path on our site. */
+const URL_TABLES = {
+	"players": {primary: "Players", additional: null},
+	"villagers": {primary: "Villagers", additional: ["Farms"]},
+	"farms": {primary: "Farms", additional: ["Players"]},
+	"gifts": {primary: "Gifts", additional: null},
+	"gifthistories": {primary: "GiftHistories", additional: ["Players", "Gifts", "Villagers"]},
+	"playersvillagersrelationships": {primary: "PlayersVillagersRelationships", additional: null},
+	"villagersgiftspreferences": {primary: "VillagersGiftsPreferences", additional: null}
 };
+
+const FARM_TYPES = ["Standard", "Riverland", "Forest", "Hill-top", "Wilderness", "Four Corners", "Beach", "Meadowlands"];
+const SEASONS = ["Spring", "Summer", "Fall", "Winter"];
 
 
 /**************************************************************************** ROUTES */
@@ -46,21 +50,67 @@ app.get("/", async function (req, res) {
 
 app.get("/tables/:db_tablename", async function (req, res) {
 	const URL_TABLE_NAME = (req.params.db_tablename).toLowerCase();
-	const TABLE_NAME = (URL_TABLE_NAME in URL_TO_TABLE_NAME) ? URL_TO_TABLE_NAME[URL_TABLE_NAME] : null;
+	const NEEDED_TABLES = (URL_TABLE_NAME in URL_TABLES) ? URL_TABLES[URL_TABLE_NAME] : null;
 
-	if (TABLE_NAME) {
+	if (NEEDED_TABLES) {
 		try {
-			const TABLE_DATA = (await sql_util.fetch_full_table(db, TABLE_NAME));
-			console.log(TABLE_DATA[0]);
-			res.status(200).render(`pages_${URL_TABLE_NAME}`, {
-				[TABLE_NAME]: TABLE_DATA[0]
-			});
+			/* empty object */
+			let handlebar_data = new Object(null);
+			const PRIMARY_TABLE_NAME = NEEDED_TABLES.primary;
+
+			handlebar_data[PRIMARY_TABLE_NAME] = (await sql_util.table_select(db, PRIMARY_TABLE_NAME))[0];
+
+
+			if (NEEDED_TABLES.additional) {
+				/* for every table needed, */
+				for (const TABLE_NAME of NEEDED_TABLES.additional) {
+					/* request it from the SQL server and dump it into the table data object */
+					handlebar_data[TABLE_NAME] = (await sql_util.table_select(db, TABLE_NAME))[0];
+				}
+			}
+
+			/* constants */
+			handlebar_data["FARM_TYPES"] = FARM_TYPES;
+			handlebar_data["SEASONS"] = SEASONS;
+
+			res.status(200).render(`pages_${URL_TABLE_NAME}`, handlebar_data);
 		} catch (error) {
 			res.status(404).send("Desired table does not exist!");
 		}
 	} else {
 		res.status(404).send("Table specified in the URL does not have a translation!");
 	}
+});
+
+/* used by UPDATE and DELETE */
+app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req, res) {
+	/* the table's name, translated into its actual SQL name. */
+	const TABLE_NAME = URL_TABLES[(req.params.db_tablename).toLowerCase()].primary;
+	/* the action to take. */
+	const ACTION = req.params.db_action
+	/* primary key of the element in question */
+	const PRIMARY_KEY = req.params.db_primary_key.split("/");
+	/* contains attributes that the form specified */
+	const FORM_DATA = req.body;
+
+	if (ACTION === "delete") {
+		sql_util.table_delete(db, TABLE_NAME, PRIMARY_KEY);
+	} else if (ACTION === "update") {
+		sql_util.table_update(db, TABLE_NAME, PRIMARY_KEY, FORM_DATA);
+	}
+
+	res.redirect(`/tables/${req.params.db_tablename}`);
+});
+
+/* used by INSERT */
+app.post("/tables/:db_tablename/insert", async function (req, res) {
+	const TABLE_NAME = URL_TABLES[(req.params.db_tablename).toLowerCase()].primary;
+	const ACTION = "insert";
+	const FORM_DATA = req.body;
+
+	sql_util.table_insert(db, TABLE_NAME, FORM_DATA);
+
+	res.redirect(`/tables/${req.params.db_tablename}`);
 });
 
 app.get("/send_ddl", async function (req, res) {

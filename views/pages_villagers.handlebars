@@ -8,12 +8,12 @@
   <tbody>
     {{#each Villagers}}
       <tr>
-        <form method="post" action="/villagers/update/{{villagerID}}">
+        <form method="post" action="/tables/villagers/update/{{villagerID}}">
           <td>{{villagerID}}</td>
           <td><input name="villagerName" value="{{villagerName}}" required /></td>
           <td>
             <select name="birthdaySeason">
-              {{#each ../seasons}}
+              {{#each ../SEASONS}}
                 <option {{#if (eq this ../birthdaySeason)}}selected{{/if}}>{{this}}</option>
               {{/each}}
             </select>
@@ -23,7 +23,7 @@
           <td>
             <select name="assignedFarmID">
               <option value="">— None —</option>
-              {{#each ../farms}}
+              {{#each ../Farms}}
                 <option value="{{farmID}}" {{#if (eq farmID ../assignedFarmID)}}selected{{/if}}>
                   {{farmName}}
                 </option>
@@ -33,7 +33,7 @@
           <td><button type="submit">Save</button></td>
         </form>
         <td>
-          <form method="post" action="/villagers/delete/{{villagerID}}" style="display:inline;">
+          <form method="post" action="/tables/villagers/delete/{{villagerID}}" style="display:inline;">
             <button type="submit">Delete</button>
           </form>
         </td>
@@ -45,7 +45,7 @@
 </table>
 
 <h2>Add Villager</h2>
-<form method="post" action="/villagers">
+<form method="post" action="/tables/villagers/insert">
   <input name="villagerName" placeholder="Name" required />
   <select name="birthdaySeason" required>
     {{#each seasons}}<option>{{this}}</option>{{/each}}

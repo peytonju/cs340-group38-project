@@ -9,7 +9,7 @@
         <td>{{playerID}}</td>
         <td>{{playerName}}</td>
         <td>
-          <form method="post" action="/players/delete/{{playerID}}" style="display:inline;">
+          <form method="post" action="/tables/players/delete/{{playerID}}" style="display:inline;">
             <button type="submit">Delete</button>
           </form>
         </td>
@@ -21,7 +21,7 @@
 </table>
 
 <h2>Add Player</h2>
-<form method="post" action="/players">
+<form method="post" action="/tables/players/insert">
   <input name="playerName" placeholder="Name" required />
   <button type="submit">Add</button>
 </form>

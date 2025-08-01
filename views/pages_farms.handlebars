@@ -8,12 +8,12 @@
   <tbody>
     {{#each Farms}}
       <tr>
-        <form method="post" action="/farms/update/{{farmID}}">
+        <form method="post" action="/tables/farms/update/{{farmID}}">
           <td>{{farmID}}</td>
           <td>
             <select name="playerID">
-              {{#each ../players}}
-                <option value="{{playerID}}" {{#if (eq playerID ../owner.playerID)}}selected{{/if}}>
+              {{#each ../Players}}
+                <option value="{{playerID}}" {{#if (eq playerID ../playerID)}}selected{{/if}}>
                   {{playerName}}
                 </option>
               {{/each}}
@@ -22,7 +22,7 @@
           <td><input name="farmName" value="{{farmName}}" required /></td>
           <td>
             <select name="farmType">
-              {{#each ../availableTypes}}
+              {{#each ../FARM_TYPES}}
                 <option {{#if (eq this ../farmType)}}selected{{/if}}>{{this}}</option>
               {{/each}}
             </select>
@@ -30,7 +30,7 @@
           <td><button type="submit">Save</button></td>
         </form>
         <td>
-          <form method="post" action="/farms/delete/{{farmID}}" style="display:inline;">
+          <form method="post" action="/tables/farms/delete/{{farmID}}" style="display:inline;">
             <button type="submit">Delete</button>
           </form>
         </td>
@@ -42,14 +42,18 @@
 </table>
 
 <h2>Add Farm</h2>
-<form method="post" action="/farms">
+<form method="post" action="/tables/farms/insert">
   <input name="farmName" placeholder="Farm name" required />
   <select name="playerID" required>
     <option disabled selected>Owner…</option>
-    {{#each players}}<option value="{{playerID}}">{{playerName}}</option>{{/each}}
+    {{#each Players}}
+      <option value="{{playerID}}">{{playerName}}</option>
+    {{/each}}
   </select>
   <select name="farmType" required>
-    {{#each availableTypes}}<option>{{this}}</option>{{/each}}
+    {{#each FARM_TYPES}}
+      <option>{{this}}</option>
+    {{/each}}
   </select>
   <button type="submit">Add</button>
 </form>

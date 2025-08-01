@@ -13,7 +13,7 @@
         <td>{{villager.villagerName}}</td>
         <td>{{gift.giftName}}</td>
         <td>
-          <form method="post" action="/giftHistories/delete/{{playerID}}/{{villagerID}}/{{giftID}}/{{givenDate}}" style="display:inline;">
+          <form method="post" action="/tables/giftHistories/delete/{{playerID}}/{{villagerID}}/{{giftID}}/{{givenDate}}" style="display:inline;">
             <button type="submit">Delete</button>
           </form>
         </td>
@@ -25,7 +25,7 @@
 </table>
 
 <h2>Record Gift</h2>
-<form method="post" action="/giftHistories">
+<form method="post" action="/tables/giftHistories/insert">
   <input type="date" name="givenDate" required />
 
   <select name="playerID" required>
