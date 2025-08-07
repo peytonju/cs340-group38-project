@@ -118,6 +118,16 @@ app.get("/send_ddl", async function (req, res) {
 	res.status(200).send("ddl sent");
 });
 
+app.get("/reset", async function (req, res) {
+	try {
+		sql_util.reset_database(db);
+		res.status(200).send("Database reset successfully");
+	} catch (error) {
+		console.error("Reset failed:", error);
+		res.status(500).send("Database reset failed: " + error.message);
+	}
+});
+
 
 /**************************************************************************** LISTENER */
 app.listen(PORT, function() {

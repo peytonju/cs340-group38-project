@@ -5,6 +5,15 @@ function send_ddl(db) {
 	db.query(DDL);
 }
 
+function reset_database(db) {
+	// First, create the stored procedure by executing the reset_procedure.sql file
+	const resetProcedureSQL = fs.readFileSync("internal/reset_procedure.sql", "utf8");
+	db.query(resetProcedureSQL);
+	
+	// Then call the stored procedure to reset the database
+	return db.query("CALL ResetDatabase();");
+}
+
 function table_select(db, tablename) {
 	return db.query(`SELECT * FROM ${tablename};`);
 }
@@ -30,6 +39,7 @@ function table_delete(db, tablename, primary_key) {
 
 module.exports = {
 	send_ddl,
+	reset_database,
 	table_select,
 	table_insert,
 	table_update,
