@@ -10,8 +10,7 @@
 -- Drop the procedure if it exists
 DROP PROCEDURE IF EXISTS ResetDatabase;
 
-DELIMITER $$
-
+-- Create the stored procedure (Node.js compatible - no DELIMITER needed)
 CREATE PROCEDURE ResetDatabase()
 BEGIN
     -- Disable foreign key checks and autocommit
@@ -188,6 +187,4 @@ BEGIN
     SET FOREIGN_KEY_CHECKS = 1;
     COMMIT;
 
-END$$
-
-DELIMITER ;
+END;

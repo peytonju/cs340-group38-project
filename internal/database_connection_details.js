@@ -1,5 +1,5 @@
-const STUDENT_NAME = "dud";
-const PASSWORD = "dud";
+const STUDENT_NAME = "wilkinza";
+const PASSWORD = "4OSInPwi1Rso";
 
 let mysql = require("mysql2");
 

@@ -120,8 +120,8 @@ app.get("/send_ddl", async function (req, res) {
 
 app.get("/reset", async function (req, res) {
 	try {
-		sql_util.reset_database(db);
-		res.status(200).send("Database reset successfully");
+		await sql_util.reset_database(db);
+		res.redirect("/"); // Redirect back to the home page after successful reset
 	} catch (error) {
 		console.error("Reset failed:", error);
 		res.status(500).send("Database reset failed: " + error.message);

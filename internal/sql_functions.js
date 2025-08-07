@@ -5,13 +5,20 @@ function send_ddl(db) {
 	db.query(DDL);
 }
 
-function reset_database(db) {
-	// First, create the stored procedure by executing the reset_procedure.sql file
-	const resetProcedureSQL = fs.readFileSync("internal/reset_procedure.sql", "utf8");
-	db.query(resetProcedureSQL);
-	
-	// Then call the stored procedure to reset the database
-	return db.query("CALL ResetDatabase();");
+async function reset_database(db) {
+	try {
+		// Read the stored procedure file
+		const resetProcedureSQL = fs.readFileSync("internal/reset_procedure.sql", "utf8");
+		
+		// Execute the entire file as one query (thanks to multipleStatements: true)
+		await db.query(resetProcedureSQL);
+		
+		// Then call the stored procedure to reset the database
+		return await db.query("CALL ResetDatabase();");
+	} catch (error) {
+		console.error("Error in reset_database:", error);
+		throw error;
+	}
 }
 
 function table_select(db, tablename) {
