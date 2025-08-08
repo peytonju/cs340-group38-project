@@ -8,7 +8,7 @@ function send_ddl(db) {
 async function reset_database(db) {
 	try {
 		// Read the stored procedure file
-		const resetProcedureSQL = fs.readFileSync("internal/reset_procedure.sql", "utf8");
+		const resetProcedureSQL = fs.readFileSync("internal/pl.sql", "utf8");
 		
 		// Execute the entire file as one query (thanks to multipleStatements: true)
 		await db.query(resetProcedureSQL);

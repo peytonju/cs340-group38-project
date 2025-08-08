@@ -45,7 +45,8 @@ const SEASONS = ["Spring", "Summer", "Fall", "Winter"];
 
 /**************************************************************************** ROUTES */
 app.get("/", async function (req, res) {
-	res.status(200).render("pages_root");
+	const resetSuccess = req.query.reset === 'success';
+	res.status(200).render("pages_root", { resetSuccess });
 });
 
 app.get("/tables/:db_tablename", async function (req, res) {
@@ -121,7 +122,7 @@ app.get("/send_ddl", async function (req, res) {
 app.get("/reset", async function (req, res) {
 	try {
 		await sql_util.reset_database(db);
-		res.redirect("/"); // Redirect back to the home page after successful reset
+		res.redirect("/?reset=success"); // Redirect with success parameter
 	} catch (error) {
 		console.error("Reset failed:", error);
 		res.status(500).send("Database reset failed: " + error.message);

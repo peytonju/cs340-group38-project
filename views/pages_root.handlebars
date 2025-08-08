@@ -1,0 +1,25 @@
+{{!-- home page --}}
+<h1>Stardew Valley: Pelican Town Social Registry</h1>
+
+{{#if resetSuccess}}
+<div style="background-color: #d4edda; color: #155724; padding: 15px; margin: 20px 0; border: 1px solid #c3e6cb; border-radius: 5px;">
+  <strong>✅ Database Reset Successful!</strong><br>
+  All tables have been recreated and populated with sample data.
+</div>
+{{/if}}
+
+<p>Welcome to the Pelican Town Social Registry! This application helps you manage relationships between players, villagers, and gifts in Stardew Valley.</p>
+
+<h2>Available Tables:</h2>
+<ul>
+  <li><a href="/tables/players">Players</a> - Manage player accounts</li>
+  <li><a href="/tables/farms">Farms</a> - View farm information and ownership</li>
+  <li><a href="/tables/villagers">Villagers</a> - Manage villager data</li>
+  <li><a href="/tables/gifts">Gifts</a> - Browse available gifts and their values</li>
+  <li><a href="/tables/gifthistories">Gift History</a> - Track gifts given to villagers</li>
+  <li><a href="/tables/playersvillagersrelationships">Relationships</a> - Manage player-villager relationships</li>
+  <li><a href="/tables/villagersgiftspreferences">Gift Preferences</a> - Track what gifts villagers like</li>
+</ul>
+
+<h2>Database Management:</h2>
+<p>Use the <strong>RESET</strong> button in the navigation to reset all data to the initial sample state.</p>

@@ -4,7 +4,7 @@
 -- #####                                        #####
 -- #####            Stardew Valley:             #####
 -- #####     Pelican Town Social Registry       #####
--- ####           RESET Stored Procedure	 	#####
+-- ####              PL.SQL File		 		#####
 -- ##################################################
 
 -- Drop the procedure if it exists
