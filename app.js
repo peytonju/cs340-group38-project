@@ -35,8 +35,8 @@ const URL_TABLES = {
 	"farms": {primary: "Farms", additional: ["Players"]},
 	"gifts": {primary: "Gifts", additional: null},
 	"gifthistories": {primary: "GiftHistories", additional: ["Players", "Gifts", "Villagers"]},
-	"playersvillagersrelationships": {primary: "PlayersVillagersRelationships", additional: null},
-	"villagersgiftspreferences": {primary: "VillagersGiftsPreferences", additional: null}
+	"playersvillagersrelationships": {primary: "PlayersVillagersRelationships", additional: ["Players", "Villagers"]},
+	"villagersgiftspreferences": {primary: "VillagersGiftsPreferences", additional: ["Villagers", "Gifts"]}
 };
 
 const FARM_TYPES = ["Standard", "Riverland", "Forest", "Hill-top", "Wilderness", "Four Corners", "Beach", "Meadowlands"];

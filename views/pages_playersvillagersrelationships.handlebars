@@ -1,1 +1,50 @@
-page playersvillagersrelationships
+{{!-- playersvillagersrelationships.handlebars (list / add) --}}
+<h1>Player-Villager Relationships</h1>
+
+<table>
+  <thead>
+    <tr><th>Player</th><th>Villager</th><th>Friendship Level</th><th>Relationship Status</th></tr>
+  </thead>
+  <tbody>
+    {{#each PlayersVillagersRelationships}}
+      <tr>
+        <td>{{player.playerName}}</td>
+        <td>{{villager.villagerName}}</td>
+        <td>{{friendshipLevel}}</td>
+        <td>{{relationshipLevel}}</td>
+      </tr>
+    {{else}}
+      <tr><td colspan="4">No relationships recorded.</td></tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Add Relationship</h2>
+<form method="post" action="/tables/playersvillagersrelationships/insert">
+  <select name="playerID" required>
+    <option disabled selected>Select Player…</option>
+    {{#each Players}}
+      <option value="{{playerID}}">{{playerName}}</option>
+    {{/each}}
+  </select>
+  
+  <select name="villagerID" required>
+    <option disabled selected>Select Villager…</option>
+    {{#each Villagers}}
+      <option value="{{villagerID}}">{{villagerName}}</option>
+    {{/each}}
+  </select>
+  
+  <input name="friendshipLevel" type="number" min="0" max="10" placeholder="Friendship Level (0-10)" required />
+  
+  <select name="relationshipLevel" required>
+    <option disabled selected>Relationship Status…</option>
+    <option value="acquaintance">Acquaintance</option>
+    <option value="friend">Friend</option>
+    <option value="best friend">Best Friend</option>
+    <option value="dating">Dating</option>
+    <option value="married">Married</option>
+  </select>
+  
+  <button type="submit">Add Relationship</button>
+</form>

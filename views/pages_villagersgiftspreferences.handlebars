@@ -1,1 +1,47 @@
-page villagersgiftspreferences
+{{!-- villagersgiftspreferences.handlebars (list / add) --}}
+<h1>Villager Gift Preferences</h1>
+
+<table>
+  <thead>
+    <tr><th>Villager</th><th>Gift</th><th>Preference</th></tr>
+  </thead>
+  <tbody>
+    {{#each VillagersGiftsPreferences}}
+      <tr>
+        <td>{{villager.villagerName}}</td>
+        <td>{{gift.giftName}}</td>
+        <td>{{preference}}</td>
+      </tr>
+    {{else}}
+      <tr><td colspan="3">No gift preferences recorded.</td></tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<h2>Add Gift Preference</h2>
+<form method="post" action="/tables/villagersgiftspreferences/insert">
+  <select name="villagerID" required>
+    <option disabled selected>Select Villager…</option>
+    {{#each Villagers}}
+      <option value="{{villagerID}}">{{villagerName}}</option>
+    {{/each}}
+  </select>
+  
+  <select name="giftID" required>
+    <option disabled selected>Select Gift…</option>
+    {{#each Gifts}}
+      <option value="{{giftID}}">{{giftName}}</option>
+    {{/each}}
+  </select>
+  
+  <select name="preference" required>
+    <option disabled selected>Preference Level…</option>
+    <option value="love">Love</option>
+    <option value="like">Like</option>
+    <option value="neutral">Neutral</option>
+    <option value="dislike">Dislike</option>
+    <option value="hate">Hate</option>
+  </select>
+  
+  <button type="submit">Add Preference</button>
+</form>
