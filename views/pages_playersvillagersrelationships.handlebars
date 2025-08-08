@@ -3,15 +3,39 @@
 
 <table>
   <thead>
-    <tr><th>Player</th><th>Villager</th><th>Friendship Level</th><th>Relationship Status</th></tr>
+    <tr><th>Player</th><th>Villager</th><th>Friendship Level</th><th>Relationship Status</th><th>Delete</th></tr>
   </thead>
   <tbody>
     {{#each PlayersVillagersRelationships}}
       <tr>
-        <td>{{player.playerName}}</td>
-        <td>{{villager.villagerName}}</td>
+        <td>
+          <select name="playerID">
+              {{#each ../Players}}
+                <option value="{{playerID}}" {{#if (eq playerID ../playerID)}}selected{{/if}}>
+                  {{playerName}}
+                </option>
+              {{/each}}
+            </select>
+        </td>
+        
+        <td>
+          <select name="villagerID">
+              {{#each ../Villagers}}
+                <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
+                  {{villagerName}}
+                </option>
+              {{/each}}
+            </select>
+        </td>
+
         <td>{{friendshipLevel}}</td>
         <td>{{relationshipLevel}}</td>
+
+        <td>
+          <form method="post" action="/tables/playersvillagersrelationships/delete/{{playerID}},{{villagerID}}" style="display:inline;">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
       </tr>
     {{else}}
       <tr><td colspan="4">No relationships recorded.</td></tr>

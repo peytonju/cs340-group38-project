@@ -3,19 +3,41 @@
 
 <table>
   <thead>
-    <tr><th>Date</th><th>Player</th><th>Villager</th><th>Gift</th><th>Delete</th></tr>
+    <tr><th>Date</th><th>Player</th><th>Villager</th><th>Gift</th></tr>
   </thead>
   <tbody>
     {{#each GiftHistories}}
       <tr>
         <td>{{givenDate}}</td>
-        <td>{{player.playerName}}</td>
-        <td>{{villager.villagerName}}</td>
-        <td>{{gift.giftName}}</td>
+        
         <td>
-          <form method="post" action="/tables/giftHistories/delete/{{playerID}}/{{villagerID}}/{{giftID}}/{{givenDate}}" style="display:inline;">
-            <button type="submit">Delete</button>
-          </form>
+          <select name="playerID">
+              {{#each ../Players}}
+                <option value="{{playerID}}" {{#if (eq playerID ../playerID)}}selected{{/if}}>
+                  {{playerName}}
+                </option>
+              {{/each}}
+            </select>
+        </td>
+
+        <td>
+          <select name="villagerID">
+              {{#each ../Villagers}}
+                <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
+                  {{villagerName}}
+                </option>
+              {{/each}}
+            </select>
+        </td>
+        
+        <td>
+          <select name="giftID">
+              {{#each ../Gifts}}
+                <option value="{{giftID}}" {{#if (eq giftID ../giftID)}}selected{{/if}}>
+                  {{giftName}}
+                </option>
+              {{/each}}
+            </select>
         </td>
       </tr>
     {{else}}

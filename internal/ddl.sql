@@ -72,11 +72,11 @@ CREATE TABLE `Villagers` (
 	`birthdaySeason` varchar(10) not null,
 	`birthdayDay` tinyint unsigned not null,
 	`homeArea` varchar(100) not null,
-	`assignedFarmID` int,
+	`farmID` int,
 
 	-- constraints
 	PRIMARY KEY (`villagerID`),
-	FOREIGN KEY (`assignedFarmID`) REFERENCES Farms (`farmID`) ON DELETE CASCADE
+	FOREIGN KEY (`farmID`) REFERENCES Farms (`farmID`) ON DELETE CASCADE
 );
 
 -- category table
@@ -97,7 +97,7 @@ CREATE TABLE `GiftHistories` (
 	`playerID` int not null,
 	`villagerID` int not null,
 	`giftID` int not null,
-	`givenDate` date not null,
+	`givenDate` datetime not null,
 
 	-- constraints
 	PRIMARY KEY (`playerID`, `villagerID`, `giftID`, `givenDate`),
@@ -157,7 +157,7 @@ INSERT INTO `Farms` (`playerID`,`farmName`,`farmType`) VALUES
 
 -- 3) Villagers (A farm with multiple villagers: Haley & Jas on Farm 1)
 INSERT INTO `Villagers`
- (`villagerName`,`birthdaySeason`,`birthdayDay`,`homeArea`,`assignedFarmID`)
+ (`villagerName`,`birthdaySeason`,`birthdayDay`,`homeArea`,`farmID`)
 VALUES
  ('Haley', 'Spring', 14, 'Pelican Town', (SELECT farmID FROM Farms WHERE farmName = 'Yellow Submarine')),
  ('Jas', 'Summer', 4, 'Pelican Town', (SELECT farmID FROM Farms WHERE farmName = 'Yellow Submarine')),

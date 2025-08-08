@@ -66,14 +66,14 @@ SELECT * FROM `Villagers`
         'villagerID' = int
 
 -- ##### insert
-INSERT INTO `Villagers` (`villagerName`, `birthdaySeason`, `birthdayDay`, `homeArea`, `assignedFarmID`)
+INSERT INTO `Villagers` (`villagerName`, `birthdaySeason`, `birthdayDay`, `homeArea`, `farmID`)
     VALUES
         (varchar, varchar, int, varchar, int)
 
 -- ##### update
 UPDATE `Villagers`
     SET
-        'villagerName' = varchar, 'birthdaySeason' = varchar, 'birthdayDay' = int, 'homeArea' = varchar, 'assignedFarmID' = int
+        'villagerName' = varchar, 'birthdaySeason' = varchar, 'birthdayDay' = int, 'homeArea' = varchar, 'farmID' = int
     WHERE
         'villagerID' = int
 

@@ -3,14 +3,38 @@
 
 <table>
   <thead>
-    <tr><th>Villager</th><th>Gift</th><th>Preference</th></tr>
+    <tr><th>Villager</th><th>Gift</th><th>Preference</th><th>Delete</th></tr>
   </thead>
   <tbody>
     {{#each VillagersGiftsPreferences}}
       <tr>
-        <td>{{villager.villagerName}}</td>
-        <td>{{gift.giftName}}</td>
+
+        <td>
+          <select name="villagerID">
+              {{#each ../Villagers}}
+                <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
+                  {{villagerName}}
+                </option>
+              {{/each}}
+            </select>
+        </td>
+
+        <td>
+          <select name="giftID">
+              {{#each ../Gifts}}
+                <option value="{{giftID}}" {{#if (eq giftID ../giftID)}}selected{{/if}}>
+                  {{giftName}}
+                </option>
+              {{/each}}
+            </select>
+        </td>
         <td>{{preference}}</td>
+
+        <td>
+          <form method="post" action="/tables/villagersgiftspreferences/delete/{{villagerID}},{{giftID}}" style="display:inline;">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
       </tr>
     {{else}}
       <tr><td colspan="3">No gift preferences recorded.</td></tr>

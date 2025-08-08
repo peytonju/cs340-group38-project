@@ -21,10 +21,10 @@
           </td>
           <td><input name="homeArea" value="{{homeArea}}" /></td>
           <td>
-            <select name="assignedFarmID">
+            <select name="farmID">
               <option value="">— None —</option>
               {{#each ../Farms}}
-                <option value="{{farmID}}" {{#if (eq farmID ../assignedFarmID)}}selected{{/if}}>
+                <option value="{{farmID}}" {{#if (eq farmID ../farmID)}}selected{{/if}}>
                   {{farmName}}
                 </option>
               {{/each}}
@@ -52,7 +52,7 @@
   </select>
   <input type="number" name="birthdayDay" min="1" max="28" placeholder="Day" required style="width:4em" />
   <input name="homeArea" placeholder="Home area" />
-  <select name="assignedFarmID">
+  <select name="farmID">
     <option value="">— None —</option>
     {{#each Farms}}<option value="{{farmID}}">{{farmName}}</option>{{/each}}
   </select>
