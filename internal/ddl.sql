@@ -117,7 +117,6 @@ CREATE TABLE `PlayersVillagersRelationships` (
 	`playerID` int not null,
 	`villagerID` int not null,
 	`friendshipLevel` int not null default 0,
-	`relationshipLevel` varchar(50) not null default 'acquaintance',
 
 	-- constraints
 	PRIMARY KEY (`playerID`, `villagerID`),
@@ -193,20 +192,20 @@ INSERT INTO `GiftHistories` (`playerID`,`villagerID`,`giftID`,`givenDate`) VALUE
 
 -- 6) PlayersVillagersRelationships (Ringo knows two villagers)
 INSERT INTO `PlayersVillagersRelationships`
- (`playerID`,`villagerID`,`friendshipLevel`,`relationshipLevel`)
+ (`playerID`,`villagerID`,`friendshipLevel`)
 VALUES
  ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
-  3, 'friend'), -- Ringo & Haley
+  3), -- Ringo & Haley
  ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
-  1, 'acquaintance'), -- Ringo & Abigail
+  1), -- Ringo & Abigail
  ((SELECT playerID FROM Players WHERE playerName = 'John'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Sebastian'), 
-  5, 'friend'), -- John & Sebastian
+  5), -- John & Sebastian
  ((SELECT playerID FROM Players WHERE playerName = 'Paul'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
-  8, 'best friend'); -- Paul & Abigail
+  8); -- Paul & Abigail
 
 -- 7) VillagersGiftsPreferences
 INSERT INTO `VillagersGiftsPreferences`

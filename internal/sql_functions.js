@@ -28,6 +28,33 @@ function table_select(db, tablename) {
 }
 
 
+function table_call_with_args(db, tablename, primary_key, form_data, function_prefix) {
+	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
+
+	let arg_str = "";
+
+	for (const KEY in form_data) {
+		if (form_data[KEY] === "null") {
+			arg_str += ",NULL";
+		} else {
+			arg_str += `,'${form_data[KEY]}'`;
+		}
+	}
+	
+	if (primary_key !== null) {
+		arg_str = primary_key + arg_str;
+	} else {
+		arg_str = arg_str.substring(1);
+	}
+
+	console.log(arg_str);
+
+	if (PROCEDURE_NAME) {
+		db.query(`CALL ${function_prefix}_${PROCEDURE_NAME}(${arg_str});`);
+	}
+}
+
+
 function table_to_pl_mapper(tablename) {
 	if (tablename) {
 		switch (tablename) {
@@ -55,11 +82,7 @@ function table_insert(db, tablename, form_data) {
 	console.log(`received, \n\ttable name: ${tablename}\n\tform data:`);
 	console.dir(form_data);
 
-	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
-
-	// if (PROCEDURE_NAME) {
-	// 	db.query(`CALL create_${PROCEDURE_NAME}();`);
-	// }
+	table_call_with_args(db, tablename, null, form_data, "create");
 }
 
 function table_update(db, tablename, primary_key, form_data) {
@@ -67,11 +90,7 @@ function table_update(db, tablename, primary_key, form_data) {
 	console.log(`received, \n\ttable name: ${tablename}\n\tprimary key: ${primary_key}\n\tform data:`);
 	console.dir(form_data);
 
-	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
-
-	// if (PROCEDURE_NAME) {
-	// 	db.query(`CALL update_${PROCEDURE_NAME}(${primary_key});`);
-	// }
+	table_call_with_args(db, tablename, primary_key, form_data, "update");
 }
 
 function table_delete(db, tablename, primary_key) {

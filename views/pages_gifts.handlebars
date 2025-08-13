@@ -2,14 +2,23 @@
 <h1>Gifts</h1>
 
 <table>
-  <thead><tr><th>ID</th><th>Name</th><th>Value</th><th>Save</th><th>Delete</th></tr></thead>
+  <thead><tr><th>ID</th><th>Name</th><th>Value</th></tr></thead>
   <tbody>
     {{#each Gifts}}
       <tr>
         <form method="post" action="/tables/gifts/update/{{giftID}}">
           <td>{{giftID}}</td>
+
           <td><input name="giftName" value="{{giftName}}" required /></td>
+
           <td><input name="value" type="number" min="0" value="{{value}}" required /></td>
+
+          <td><select name="seasonAvailable" required>
+              {{#each ../SEASONS}}
+                <option {{#if (eq this ../seasonAvailable)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+          </select></td>
+
           <td><button type="submit">Save</button></td>
         </form>
         <td>
@@ -27,6 +36,14 @@
 <h2>Add Gift</h2>
 <form method="post" action="/tables/gifts/insert">
   <input name="giftName" placeholder="Gift name" required />
+
   <input name="value" type="number" min="0" placeholder="Value" required />
+
+  <select name="seasonAvailable" required>
+    {{#each SEASONS}}
+      <option>{{this}}</option>
+    {{/each}}
+  </select>
+
   <button type="submit">Add</button>
 </form>

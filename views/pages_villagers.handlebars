@@ -3,33 +3,41 @@
 
 <table>
   <thead>
-    <tr><th>ID</th><th>Name</th><th>Birthday</th><th>Home</th><th>Farm</th><th>Save</th><th>Delete</th></tr>
+    <tr><th>ID</th><th>Name</th><th>Birthday</th><th>Home</th><th>Farm</th></tr>
   </thead>
   <tbody>
     {{#each Villagers}}
       <tr>
         <form method="post" action="/tables/villagers/update/{{villagerID}}">
           <td>{{villagerID}}</td>
+
           <td><input name="villagerName" value="{{villagerName}}" required /></td>
+
           <td>
-            <select name="birthdaySeason">
+            <select name="birthdaySeason" required>
               {{#each ../SEASONS}}
                 <option {{#if (eq this ../birthdaySeason)}}selected{{/if}}>{{this}}</option>
               {{/each}}
             </select>
+          </td>
+
+          <td>
             <input type="number" name="birthdayDay" min="1" max="28" value="{{birthdayDay}}" required style="width:4em" />
           </td>
-          <td><input name="homeArea" value="{{homeArea}}" /></td>
+
+          <td><input name="homeArea" value="{{homeArea}}" required/></td>
+
           <td>
-            <select name="farmID">
-              <option value="">— None —</option>
+            <select name="farmID" required>
+              <option value="null">— None —</option>
               {{#each ../Farms}}
                 <option value="{{farmID}}" {{#if (eq farmID ../farmID)}}selected{{/if}}>
-                  {{farmName}}
+                  ({{farmID}}) {{farmName}}
                 </option>
               {{/each}}
             </select>
           </td>
+
           <td><button type="submit">Save</button></td>
         </form>
         <td>
@@ -47,15 +55,20 @@
 <h2>Add Villager</h2>
 <form method="post" action="/tables/villagers/insert">
   <input name="villagerName" placeholder="Name" required />
+
   <select name="birthdaySeason" required>
     {{#each SEASONS}}<option>{{this}}</option>{{/each}}
   </select>
+
   <input type="number" name="birthdayDay" min="1" max="28" placeholder="Day" required style="width:4em" />
-  <input name="homeArea" placeholder="Home area" />
-  <select name="farmID">
-    <option value="">— None —</option>
-    {{#each Farms}}<option value="{{farmID}}">{{farmName}}</option>{{/each}}
+
+  <input name="homeArea" placeholder="Home area" required/>
+
+  <select name="farmID" required>
+    <option value="null">— None —</option>
+    {{#each Farms}}<option value="{{farmID}}">({{farmID}}) {{farmName}}</option>{{/each}}
   </select>
+
   <button type="submit">Add</button>
 </form>
 {{!-- Note: Ensure that the seasons and farms context variables are passed to this template from the server --}}

@@ -2,12 +2,17 @@
 <h1>Players</h1>
 
 <table>
-  <thead><tr><th>ID</th><th>Name</th><th>Delete</th></tr></thead>
+  <thead><tr><th>ID</th><th>Name</th></tr></thead>
   <tbody>
     {{#each Players}}
       <tr>
-        <td>{{playerID}}</td>
-        <td>{{playerName}}</td>
+        <form method="post" action="/tables/players/update/{{playerID}}">
+          <td>{{playerID}}</td>
+
+          <td><input name="playerName" value="{{playerName}}" required /></td>
+
+          <td><button type="submit">Save</button></td>
+        </form>
         <td>
           <form method="post" action="/tables/players/delete/{{playerID}}" style="display:inline;">
             <button type="submit">Delete</button>
@@ -23,5 +28,6 @@
 <h2>Add Player</h2>
 <form method="post" action="/tables/players/insert">
   <input name="playerName" placeholder="Name" required />
+
   <button type="submit">Add</button>
 </form>

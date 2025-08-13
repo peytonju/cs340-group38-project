@@ -107,7 +107,6 @@ BEGIN
         `playerID` int not null,
         `villagerID` int not null,
         `friendshipLevel` int not null default 0,
-        `relationshipLevel` varchar(50) not null default 'acquaintance',
         PRIMARY KEY (`playerID`, `villagerID`),
         FOREIGN KEY (`playerID`) REFERENCES Players (`playerID`) ON DELETE CASCADE,
         FOREIGN KEY (`villagerID`) REFERENCES Villagers (`villagerID`) ON DELETE CASCADE
@@ -174,20 +173,20 @@ BEGIN
 
     -- 6) PlayersVillagersRelationships
     INSERT INTO `PlayersVillagersRelationships`
-     (`playerID`,`villagerID`,`friendshipLevel`,`relationshipLevel`)
+     (`playerID`,`villagerID`,`friendshipLevel`)
     VALUES
      ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
       (SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
-      3, 'friend'),
+      3),
      ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
       (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
-      1, 'acquaintance'),
+      1),
      ((SELECT playerID FROM Players WHERE playerName = 'John'), 
       (SELECT villagerID FROM Villagers WHERE villagerName = 'Sebastian'), 
-      5, 'friend'),
+      5),
      ((SELECT playerID FROM Players WHERE playerName = 'Paul'), 
       (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
-      8, 'best friend');
+      8);
 
     -- 7) VillagersGiftsPreferences
     INSERT INTO `VillagersGiftsPreferences`
@@ -241,7 +240,7 @@ BEGIN
     IF p_farmID IS NOT NULL THEN
 	    IF NOT EXISTS (SELECT 1 FROM Farms WHERE farmID = p_farmID) THEN
 		    SIGNAL SQLSTATE '45000'
-		    	SET MESSAGE_TEXT = 'Error: passed farm ID does not exist';
+		    	SET MESSAGE_TEXT = 'passed farm ID does not exist';
 	    END IF;
     END IF;
 
@@ -264,14 +263,13 @@ END;
 
 
 CREATE PROCEDURE create_gift (
-	IN p_giftID int,
 	IN p_giftName varchar(100),
 	IN p_value decimal(8,2),
 	IN p_seasonAvailable varchar(20)
 )
 BEGIN
-	INSERT INTO Gifts (giftID, giftName, value, seasonAvailable)
-	VALUES (p_giftID, p_giftName, p_value, p_seasonAvailable);
+	INSERT INTO Gifts (giftName, value, seasonAvailable)
+	VALUES (p_giftName, p_value, p_seasonAvailable);
     COMMIT;
 END;
 
@@ -279,20 +277,19 @@ END;
 CREATE PROCEDURE create_villager_player_relationship (
 	IN p_playerID int,
 	IN p_villagerID int,
-	IN p_friendshipLevel int,
-	IN p_relationshipLevel varchar(50)
+	IN p_friendshipLevel int
 )
 BEGIN
     DECLARE friendship_level_start int;
 
 	IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
 		SIGNAL SQLSTATE '45000' 
-			SET MESSAGE_TEXT = 'Error: passed villager ID does not exist';
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
 	END IF;
 
 	IF NOT EXISTS (SELECT 1 FROM Players WHERE playerID = p_playerID) THEN
 		SIGNAL SQLSTATE '45000' 
-			SET MESSAGE_TEXT = 'Error: passed player ID does not exist';
+			SET MESSAGE_TEXT = 'passed player ID does not exist';
 	END IF;
 
     IF (p_friendshipLevel) IS NULL THEN
@@ -301,8 +298,8 @@ BEGIN
         SET friendship_level_start = p_friendshipLevel;
     END IF;
 
-	INSERT INTO PlayersVillagersRelationships (playerID, villagerID, friendship_level_start, relationshipLevel)
-	VALUES (p_playerID, p_villagerID, friendship_level_start, p_relationshipLevel);
+	INSERT INTO PlayersVillagersRelationships (playerID, villagerID, friendship_level_start)
+	VALUES (p_playerID, p_villagerID, friendship_level_start);
     COMMIT;
 END;
 
@@ -315,12 +312,12 @@ CREATE PROCEDURE create_villager_gift_preference (
 BEGIN
 	IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed villager ID does not exist';
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
 	END IF;
 
 	IF NOT EXISTS (SELECT 1 FROM Gifts WHERE giftID = p_giftID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed gift ID does not exist';
+			SET MESSAGE_TEXT = 'passed gift ID does not exist';
 	END IF;
 
 	INSERT INTO VillagersGiftsPreferences (villagerID, giftID, preference)
@@ -339,12 +336,12 @@ BEGIN
 
 	IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed villager ID does not exist';
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
 	END IF;
 
 	IF NOT EXISTS (SELECT 1 FROM Players WHERE playerID = p_playerID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed player ID does not exist';
+			SET MESSAGE_TEXT = 'passed player ID does not exist';
 	END IF;
 
     INSERT INTO GiftHistories (playerID, villagerID, giftID, givenDate)
@@ -366,7 +363,7 @@ CREATE PROCEDURE update_player (
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM Players WHERE playerID = p_playerID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed player ID does not exist';
+			SET MESSAGE_TEXT = 'passed player ID does not exist';
 	END IF;
 
     UPDATE Players
@@ -386,7 +383,7 @@ CREATE PROCEDURE update_gift (
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM Gifts WHERE giftID = p_giftID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed gift ID does not exist';
+			SET MESSAGE_TEXT = 'passed gift ID does not exist';
 	END IF;
 
     UPDATE Gifts
@@ -423,13 +420,13 @@ BEGIN
     IF p_farmID IS NOT NULL THEN
 	    IF NOT EXISTS (SELECT 1 FROM Farms WHERE farmID = p_farmID) THEN
 		    SIGNAL SQLSTATE '45000'
-		    	SET MESSAGE_TEXT = 'Error: passed farm ID does not exist';
+		    	SET MESSAGE_TEXT = 'passed farm ID does not exist';
 	    END IF;
     END IF;
 
     IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed villager ID does not exist';
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
 	END IF;
 
 	UPDATE Villagers
@@ -443,20 +440,19 @@ END;
 CREATE PROCEDURE update_villager_player_relationship (
 	IN p_playerID int,
 	IN p_villagerID int,
-	IN p_friendshipLevel int,
-	IN p_relationshipLevel varchar(50)
+	IN p_friendshipLevel int
 )
 BEGIN
     DECLARE friendship_level_start int;
 
 	IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
 		SIGNAL SQLSTATE '45000' 
-			SET MESSAGE_TEXT = 'Error: passed villager ID does not exist';
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
 	END IF;
 
 	IF NOT EXISTS (SELECT 1 FROM Players WHERE playerID = p_playerID) THEN
 		SIGNAL SQLSTATE '45000' 
-			SET MESSAGE_TEXT = 'Error: passed player ID does not exist';
+			SET MESSAGE_TEXT = 'passed player ID does not exist';
 	END IF;
 
     IF (p_friendshipLevel) IS NULL THEN
@@ -466,7 +462,7 @@ BEGIN
     END IF;
 
     UPDATE PlayersVillagersRelationships
-    SET friendshipLevel = p_friendshipLevel, relationshipLevel = p_relationshipLevel
+    SET friendshipLevel = p_friendshipLevel
     WHERE playerID = p_playerID AND villagerID = p_villagerID;
 
     COMMIT;
@@ -481,12 +477,12 @@ CREATE PROCEDURE update_villager_gift_preference (
 BEGIN
 	IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed villager ID does not exist';
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
 	END IF;
 
 	IF NOT EXISTS (SELECT 1 FROM Gifts WHERE giftID = p_giftID) THEN
 		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Error: passed gift ID does not exist';
+			SET MESSAGE_TEXT = 'passed gift ID does not exist';
 	END IF;
 
 	UPDATE VillagersGiftsPreferences

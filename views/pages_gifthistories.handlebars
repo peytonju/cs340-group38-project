@@ -9,35 +9,29 @@
     {{#each GiftHistories}}
       <tr>
         <td>{{givenDate}}</td>
-        
+
         <td>
-          <select name="playerID">
               {{#each ../Players}}
-                <option value="{{playerID}}" {{#if (eq playerID ../playerID)}}selected{{/if}}>
-                  {{playerName}}
-                </option>
+                {{#if (eq playerID ../playerID)}}
+                  ({{playerID}}) {{playerName}}
+                {{/if}}
               {{/each}}
-            </select>
         </td>
 
         <td>
-          <select name="villagerID">
               {{#each ../Villagers}}
-                <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
-                  {{villagerName}}
-                </option>
+                {{#if (eq villagerID ../villagerID)}}
+                  ({{villagerID}}) {{villagerName}}
+                {{/if}}
               {{/each}}
-            </select>
         </td>
         
         <td>
-          <select name="giftID">
               {{#each ../Gifts}}
-                <option value="{{giftID}}" {{#if (eq giftID ../giftID)}}selected{{/if}}>
-                  {{giftName}}
-                </option>
+                {{#if (eq giftID ../giftID)}}
+                  ({{giftID}}) {{giftName}}
+                {{/if}}
               {{/each}}
-            </select>
         </td>
       </tr>
     {{else}}
@@ -46,23 +40,23 @@
   </tbody>
 </table>
 
-<h2>Record Gift</h2>
+<h2>Give Gift</h2>
 <form method="post" action="/tables/giftHistories/insert">
   <input type="date" name="givenDate" required />
 
   <select name="playerID" required>
     <option disabled selected>Player…</option>
-    {{#each players}}<option value="{{playerID}}">{{playerName}}</option>{{/each}}
+    {{#each players}}<option value="{{playerID}}">({{playerID}}) {{playerName}}</option>{{/each}}
   </select>
 
   <select name="villagerID" required>
     <option disabled selected>Villager…</option>
-    {{#each villagers}}<option value="{{villagerID}}">{{villagerName}}</option>{{/each}}
+    {{#each villagers}}<option value="{{villagerID}}">({{villagerID}}) {{villagerName}}</option>{{/each}}
   </select>
 
   <select name="giftID" required>
     <option disabled selected>Gift…</option>
-    {{#each gifts}}<option value="{{giftID}}">{{giftName}}</option>{{/each}}
+    {{#each gifts}}<option value="{{giftID}}">({{giftID}}) {{giftName}}</option>{{/each}}
   </select>
 
   <button type="submit">Add</button>

@@ -41,6 +41,8 @@ const URL_TABLES = {
 
 const FARM_TYPES = ["Standard", "Riverland", "Forest", "Hill-top", "Wilderness", "Four Corners", "Beach", "Meadowlands"];
 const SEASONS = ["Spring", "Summer", "Fall", "Winter"];
+const RELATIONSHIP_LEVELS = ["acquaintance", "friend", "spouse"];
+const GIFT_LIKES = ["love", "like", "neutral", "dislike", "hate"];
 
 
 /**************************************************************************** ROUTES */
@@ -73,6 +75,8 @@ app.get("/tables/:db_tablename", async function (req, res) {
 			/* constants */
 			handlebar_data["FARM_TYPES"] = FARM_TYPES;
 			handlebar_data["SEASONS"] = SEASONS;
+			handlebar_data["RELATIONSHIP_LEVELS"] = RELATIONSHIP_LEVELS;
+			handlebar_data["GIFT_LIKES"] = GIFT_LIKES;
 
 			res.status(200).render(`pages_${URL_TABLE_NAME}`, handlebar_data);
 		} catch (error) {

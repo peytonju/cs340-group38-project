@@ -3,32 +3,39 @@
 
 <table>
   <thead>
-    <tr><th>Villager</th><th>Gift</th><th>Preference</th><th>Delete</th></tr>
+    <tr><th>Villager</th><th>Gift</th><th>Preference</th></tr>
   </thead>
   <tbody>
     {{#each VillagersGiftsPreferences}}
       <tr>
 
         <td>
-          <select name="villagerID">
+          <select name="villagerID" required>
               {{#each ../Villagers}}
                 <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
-                  {{villagerName}}
+                  ({{villagerID}}) {{villagerName}}
                 </option>
               {{/each}}
             </select>
         </td>
 
         <td>
-          <select name="giftID">
+          <select name="giftID" required>
               {{#each ../Gifts}}
                 <option value="{{giftID}}" {{#if (eq giftID ../giftID)}}selected{{/if}}>
-                  {{giftName}}
+                  ({{giftID}}) {{giftName}}
                 </option>
               {{/each}}
             </select>
         </td>
-        <td>{{preference}}</td>
+
+        <td>
+          <select name="preference" required>
+            {{#each ../GIFT_LIKES}}
+              <option value="{{this}}" {{#if (eq this ../preference)}}selected{{/if}}>{{this}}</option>
+            {{/each}}
+          </select>
+        </td>
 
         <td>
           <form method="post" action="/tables/villagersgiftspreferences/delete/{{villagerID}},{{giftID}}" style="display:inline;">
@@ -47,24 +54,22 @@
   <select name="villagerID" required>
     <option disabled selected>Select Villager…</option>
     {{#each Villagers}}
-      <option value="{{villagerID}}">{{villagerName}}</option>
+      <option value="{{villagerID}}">({{villagerID}}) {{villagerName}}</option>
     {{/each}}
   </select>
   
   <select name="giftID" required>
     <option disabled selected>Select Gift…</option>
     {{#each Gifts}}
-      <option value="{{giftID}}">{{giftName}}</option>
+      <option value="{{giftID}}">({{giftID}}) {{giftName}}</option>
     {{/each}}
   </select>
   
   <select name="preference" required>
     <option disabled selected>Preference Level…</option>
-    <option value="love">Love</option>
-    <option value="like">Like</option>
-    <option value="neutral">Neutral</option>
-    <option value="dislike">Dislike</option>
-    <option value="hate">Hate</option>
+    {{#each GIFT_LIKES}}
+      <option value="{{this}}">{{this}}</option>
+    {{/each}}
   </select>
   
   <button type="submit">Add Preference</button>
