@@ -45,18 +45,30 @@
   <input type="date" name="givenDate" required />
 
   <select name="playerID" required>
-    <option disabled selected>Player…</option>
-    {{#each players}}<option value="{{playerID}}">({{playerID}}) {{playerName}}</option>{{/each}}
+    <option value="" disabled selected>Player…</option>
+    {{#each Players}}
+      <option value="{{playerID}}">
+        ({{playerID}}) {{playerName}}
+      </option>
+    {{/each}}
   </select>
 
   <select name="villagerID" required>
-    <option disabled selected>Villager…</option>
-    {{#each villagers}}<option value="{{villagerID}}">({{villagerID}}) {{villagerName}}</option>{{/each}}
+    <option value="" disabled selected>Villager…</option>
+    {{#each Villagers}}
+      <option value="{{villagerID}}">
+        ({{villagerID}}) {{villagerName}}
+      </option>
+    {{/each}}
   </select>
 
   <select name="giftID" required>
-    <option disabled selected>Gift…</option>
-    {{#each gifts}}<option value="{{giftID}}">({{giftID}}) {{giftName}}</option>{{/each}}
+    <option value="" disabled selected>Gift…</option>
+    {{#each Gifts}}
+      <option value="{{giftID}}">
+        ({{giftID}}) {{giftName}}
+      </option>
+    {{/each}}
   </select>
 
   <button type="submit">Add</button>

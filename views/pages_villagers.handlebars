@@ -57,7 +57,10 @@
   <input name="villagerName" placeholder="Name" required />
 
   <select name="birthdaySeason" required>
-    {{#each SEASONS}}<option>{{this}}</option>{{/each}}
+    <option value="" disabled selected>Birthday season…</option>
+    {{#each SEASONS}}
+      <option>{{this}}</option>
+    {{/each}}
   </select>
 
   <input type="number" name="birthdayDay" min="1" max="28" placeholder="Day" required style="width:4em" />
@@ -65,8 +68,12 @@
   <input name="homeArea" placeholder="Home area" required/>
 
   <select name="farmID" required>
-    <option value="null">— None —</option>
-    {{#each Farms}}<option value="{{farmID}}">({{farmID}}) {{farmName}}</option>{{/each}}
+    <option value="null">No farm</option>
+    {{#each Farms}}
+      <option value="{{farmID}}">
+        ({{farmID}}) {{farmName}}
+      </option>
+    {{/each}}
   </select>
 
   <button type="submit">Add</button>

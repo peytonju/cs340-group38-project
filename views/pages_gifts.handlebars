@@ -40,6 +40,7 @@
   <input name="value" type="number" min="0" placeholder="Value" required />
 
   <select name="seasonAvailable" required>
+    <option value="" disabled selected>Season available…</option>
     {{#each SEASONS}}
       <option>{{this}}</option>
     {{/each}}

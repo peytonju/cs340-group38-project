@@ -8,27 +8,31 @@
   <tbody>
     {{#each PlayersVillagersRelationships}}
       <tr>
-        <td>
-          <select name="playerID" required>
-              {{#each ../Players}}
-                <option value="{{playerID}}" {{#if (eq playerID ../playerID)}}selected{{/if}}>
-                  ({{playerID}}) {{playerName}}
-                </option>
-              {{/each}}
-            </select>
-        </td>
+        <form method="post" action="/tables/playersvillagersrelationships/update/">
+          <td>
+            <select name="playerID" required>
+                {{#each ../Players}}
+                  <option value="{{playerID}}" {{#if (eq playerID ../playerID)}}selected{{/if}}>
+                    ({{playerID}}) {{playerName}}
+                  </option>
+                {{/each}}
+              </select>
+          </td>
         
-        <td>
-          <select name="villagerID" required>
-              {{#each ../Villagers}}
-                <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
-                  ({{villagerID}}) {{villagerName}}
-                </option>
-              {{/each}}
+          <td>
+            <select name="villagerID" required>
+                {{#each ../Villagers}}
+                  <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
+                    ({{villagerID}}) {{villagerName}}
+                  </option>
+                {{/each}}
             </select>
-        </td>
+          </td>
 
-        <td><input name="friendshipLevel" type="number" min="0" max="10" required>{{friendshipLevel}}</input></td>
+          <td><input name="friendshipLevel" type="number" min="0" max="10" required value="{{friendshipLevel}}"/></td>
+
+          <td><button type="submit">Save</button></td>
+        </form>
 
         <td>
           <form method="post" action="/tables/playersvillagersrelationships/delete/{{playerID}},{{villagerID}}" style="display:inline;">
@@ -45,14 +49,14 @@
 <h2>Add Player-Villager Relationship</h2>
 <form method="post" action="/tables/playersvillagersrelationships/insert">
   <select name="playerID" required>
-    <option disabled selected>Select Player…</option>
+    <option value="" disabled selected>Player…</option>
     {{#each Players}}
       <option value="{{playerID}}"> ({{playerID}}) {{playerName}}</option>
     {{/each}}
   </select>
   
   <select name="villagerID" required>
-    <option disabled selected>Select Villager…</option>
+    <option value="" disabled selected>Villager…</option>
     {{#each Villagers}}
       <option value="{{villagerID}}">({{villagerID}}) {{villagerName}}</option>
     {{/each}}

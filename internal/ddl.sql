@@ -76,7 +76,7 @@ CREATE TABLE `Villagers` (
 
 	-- constraints
 	PRIMARY KEY (`villagerID`),
-	FOREIGN KEY (`farmID`) REFERENCES Farms (`farmID`) ON DELETE CASCADE
+	FOREIGN KEY (`farmID`) REFERENCES Farms (`farmID`) ON DELETE SET NULL
 );
 
 -- category table

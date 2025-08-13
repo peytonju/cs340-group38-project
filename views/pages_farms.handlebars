@@ -44,13 +44,14 @@
 <h2>Add Farm</h2>
 <form method="post" action="/tables/farms/insert">
   <select name="playerID" required>
-    <option disabled selected>Owner…</option>
+    <option value="" disabled selected>Owner…</option>
     {{#each Players}}
       <option value="{{playerID}}">({{playerID}}) {{playerName}}</option>
     {{/each}}
   </select>
   <input name="farmName" placeholder="Farm name" required />
   <select name="farmType" required>
+    <option value="" disabled selected>Farm type…</option>
     {{#each FARM_TYPES}}
       <option>{{this}}</option>
     {{/each}}

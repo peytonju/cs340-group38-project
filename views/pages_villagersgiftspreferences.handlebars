@@ -8,34 +8,35 @@
   <tbody>
     {{#each VillagersGiftsPreferences}}
       <tr>
+        <form method="post" action="/tables/villagersgiftspreferences/update/">
+          <td>
+            <select name="villagerID" required>
+                {{#each ../Villagers}}
+                  <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
+                    ({{villagerID}}) {{villagerName}}
+                  </option>
+                {{/each}}
+              </select>
+          </td>
 
-        <td>
-          <select name="villagerID" required>
-              {{#each ../Villagers}}
-                <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
-                  ({{villagerID}}) {{villagerName}}
-                </option>
+          <td>
+            <select name="giftID" required>
+                {{#each ../Gifts}}
+                  <option value="{{giftID}}" {{#if (eq giftID ../giftID)}}selected{{/if}}>
+                    ({{giftID}}) {{giftName}}
+                  </option>
+                {{/each}}
+              </select>
+          </td>
+
+          <td>
+            <select name="preference" required>
+              {{#each ../GIFT_LIKES}}
+                <option value="{{this}}" {{#if (eq this ../preference)}}selected{{/if}}>{{this}}</option>
               {{/each}}
             </select>
-        </td>
-
-        <td>
-          <select name="giftID" required>
-              {{#each ../Gifts}}
-                <option value="{{giftID}}" {{#if (eq giftID ../giftID)}}selected{{/if}}>
-                  ({{giftID}}) {{giftName}}
-                </option>
-              {{/each}}
-            </select>
-        </td>
-
-        <td>
-          <select name="preference" required>
-            {{#each ../GIFT_LIKES}}
-              <option value="{{this}}" {{#if (eq this ../preference)}}selected{{/if}}>{{this}}</option>
-            {{/each}}
-          </select>
-        </td>
+          </td>
+        </form>
 
         <td>
           <form method="post" action="/tables/villagersgiftspreferences/delete/{{villagerID}},{{giftID}}" style="display:inline;">
@@ -52,21 +53,21 @@
 <h2>Add Gift Preference</h2>
 <form method="post" action="/tables/villagersgiftspreferences/insert">
   <select name="villagerID" required>
-    <option disabled selected>Select Villager…</option>
+    <option value="" disabled selected>Villager…</option>
     {{#each Villagers}}
       <option value="{{villagerID}}">({{villagerID}}) {{villagerName}}</option>
     {{/each}}
   </select>
   
   <select name="giftID" required>
-    <option disabled selected>Select Gift…</option>
+    <option value="" disabled selected>Gift…</option>
     {{#each Gifts}}
       <option value="{{giftID}}">({{giftID}}) {{giftName}}</option>
     {{/each}}
   </select>
   
   <select name="preference" required>
-    <option disabled selected>Preference Level…</option>
+    <option value="" disabled selected>Preference Level…</option>
     {{#each GIFT_LIKES}}
       <option value="{{this}}">{{this}}</option>
     {{/each}}

@@ -1,60 +1,5 @@
 const fs = require("fs");
 
-function send_ddl(db) {
-	const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
-	db.query(DDL);
-	const PL = fs.readFileSync("internal/pl.sql", "utf8");
-	db.query(PL);
-}
-
-async function reset_database(db) {
-	try {
-		// Read the stored procedure file
-		const resetProcedureSQL = fs.readFileSync("internal/pl.sql", "utf8");
-		
-		// Execute the entire file as one query (thanks to multipleStatements: true)
-		await db.query(resetProcedureSQL);
-		
-		// Then call the stored procedure to reset the database
-		return await db.query("CALL ResetDatabase();");
-	} catch (error) {
-		console.error("Error in reset_database:", error);
-		throw error;
-	}
-}
-
-function table_select(db, tablename) {
-	return db.query(`SELECT * FROM ${tablename};`);
-}
-
-
-function table_call_with_args(db, tablename, primary_key, form_data, function_prefix) {
-	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
-
-	let arg_str = "";
-
-	for (const KEY in form_data) {
-		if (form_data[KEY] === "null") {
-			arg_str += ",NULL";
-		} else {
-			arg_str += `,'${form_data[KEY]}'`;
-		}
-	}
-	
-	if (primary_key !== null) {
-		arg_str = primary_key + arg_str;
-	} else {
-		arg_str = arg_str.substring(1);
-	}
-
-	console.log(arg_str);
-
-	if (PROCEDURE_NAME) {
-		db.query(`CALL ${function_prefix}_${PROCEDURE_NAME}(${arg_str});`);
-	}
-}
-
-
 function table_to_pl_mapper(tablename) {
 	if (tablename) {
 		switch (tablename) {
@@ -77,7 +22,66 @@ function table_to_pl_mapper(tablename) {
 	return null;
 }
 
-function table_insert(db, tablename, form_data) {
+
+async function send_ddl(db) {
+	const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
+	db.query(DDL);
+	const PL = fs.readFileSync("internal/pl.sql", "utf8");
+	db.query(PL);
+}
+
+
+async function reset_database(db) {
+	try {
+		// Read the stored procedure file
+		const resetProcedureSQL = fs.readFileSync("internal/pl.sql", "utf8");
+		
+		// Execute the entire file as one query (thanks to multipleStatements: true)
+		await db.query(resetProcedureSQL);
+		
+		// Then call the stored procedure to reset the database
+		return await db.query("CALL ResetDatabase();");
+	} catch (error) {
+		console.error("Error in reset_database:", error);
+		throw error;
+	}
+}
+
+
+async function table_select(db, tablename) {
+	return await db.query(`SELECT * FROM ${tablename};`);
+}
+
+
+async function table_call_with_args(db, tablename, primary_key, form_data, function_prefix) {
+	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
+
+	let arg_str = "";
+
+	for (const KEY in form_data) {
+		if (form_data[KEY] === "null") {
+			arg_str += ",NULL";
+		} else {
+			arg_str += `,'${form_data[KEY]}'`;
+		}
+	}
+	
+	if (primary_key !== null) {
+		arg_str = primary_key + arg_str;
+	} else {
+		/* strip the leading comma */
+		arg_str = arg_str.substring(1);
+	}
+
+	console.log(arg_str);
+
+	if (PROCEDURE_NAME) {
+		await db.query(`CALL ${function_prefix}_${PROCEDURE_NAME}(${arg_str});`);
+	}
+}
+
+
+async function table_insert(db, tablename, form_data) {
 	console.log("ran insert");
 	console.log(`received, \n\ttable name: ${tablename}\n\tform data:`);
 	console.dir(form_data);
@@ -85,7 +89,8 @@ function table_insert(db, tablename, form_data) {
 	table_call_with_args(db, tablename, null, form_data, "create");
 }
 
-function table_update(db, tablename, primary_key, form_data) {
+
+async function table_update(db, tablename, primary_key, form_data) {
 	console.log("ran update");
 	console.log(`received, \n\ttable name: ${tablename}\n\tprimary key: ${primary_key}\n\tform data:`);
 	console.dir(form_data);
@@ -93,14 +98,15 @@ function table_update(db, tablename, primary_key, form_data) {
 	table_call_with_args(db, tablename, primary_key, form_data, "update");
 }
 
-function table_delete(db, tablename, primary_key) {
+
+async function table_delete(db, tablename, primary_key) {
 	console.log("ran delete");
 	console.log(`received, \n\ttable name: ${tablename}\n\tprimary key: ${primary_key}`);
 
 	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
 
 	if (PROCEDURE_NAME) {
-		db.query(`CALL delete_${PROCEDURE_NAME}(${primary_key});`);
+		await db.query(`CALL delete_${PROCEDURE_NAME}(${primary_key});`);
 	}
 }
 

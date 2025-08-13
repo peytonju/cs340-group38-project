@@ -298,7 +298,7 @@ BEGIN
         SET friendship_level_start = p_friendshipLevel;
     END IF;
 
-	INSERT INTO PlayersVillagersRelationships (playerID, villagerID, friendship_level_start)
+	INSERT INTO PlayersVillagersRelationships (playerID, villagerID, friendshipLevel)
 	VALUES (p_playerID, p_villagerID, friendship_level_start);
     COMMIT;
 END;

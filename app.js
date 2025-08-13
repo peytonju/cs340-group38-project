@@ -99,27 +99,40 @@ app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req
 	const FORM_DATA = req.body;
 
 	if (ACTION === "delete") {
-		sql_util.table_delete(db, TABLE_NAME, PRIMARY_KEY);
+		await sql_util.table_delete(db, TABLE_NAME, PRIMARY_KEY);
 	} else if (ACTION === "update") {
-		sql_util.table_update(db, TABLE_NAME, PRIMARY_KEY, FORM_DATA);
+		await sql_util.table_update(db, TABLE_NAME, PRIMARY_KEY, FORM_DATA);
 	}
+
+	res.redirect(`/tables/${req.params.db_tablename}`);
+});
+
+/* used by UPDATE for composite-key tables */
+app.post("/tables/:db_tablename/update", async function (req, res) {
+	/* the table's name, translated into its actual SQL name. */
+	const TABLE_NAME = URL_TABLES[(req.params.db_tablename).toLowerCase()].primary;
+	/* contains attributes that the form specified */
+	const FORM_DATA = req.body;
+
+	await sql_util.table_update(db, TABLE_NAME, null, FORM_DATA);
 
 	res.redirect(`/tables/${req.params.db_tablename}`);
 });
 
 /* used by INSERT */
 app.post("/tables/:db_tablename/insert", async function (req, res) {
+	/* the table's name, translated into its actual SQL name. */
 	const TABLE_NAME = URL_TABLES[(req.params.db_tablename).toLowerCase()].primary;
-	const ACTION = "insert";
+	/* contains attributes that the form specified */
 	const FORM_DATA = req.body;
 
-	sql_util.table_insert(db, TABLE_NAME, FORM_DATA);
+	await sql_util.table_insert(db, TABLE_NAME, FORM_DATA);
 
 	res.redirect(`/tables/${req.params.db_tablename}`);
 });
 
 app.get("/send_ddl", async function (req, res) {
-	sql_util.send_ddl(db);
+	await sql_util.send_ddl(db);
 	res.status(200).send("ddl sent");
 });
 
