@@ -319,12 +319,12 @@ BEGIN
 
 	IF NOT EXISTS (SELECT 1 FROM Players WHERE playerID = p_newPlayerID) THEN
 		SIGNAL SQLSTATE '45000' 
-			SET MESSAGE_TEXT = 'passed player ID does not exist';
+			SET MESSAGE_TEXT = 'passed new player ID does not exist';
 	END IF;
 
     IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_newVillagerID) THEN
 		SIGNAL SQLSTATE '45000' 
-			SET MESSAGE_TEXT = 'passed villager ID does not exist';
+			SET MESSAGE_TEXT = 'passed new villager ID does not exist';
 	END IF;
 
 
@@ -386,6 +386,7 @@ BEGIN
         WHERE villagerID = p_villagerID AND giftID = p_giftID;
     END IF;
 
+    -- update preference
 	UPDATE VillagersGiftsPreferences
     SET preference = p_preference
     WHERE villagerID = p_villagerID AND giftID = p_giftID;
