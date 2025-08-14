@@ -23,11 +23,11 @@ function table_to_pl_mapper(tablename) {
 }
 
 
-async function send_ddl(db) {
+async function send_ddl_dml(db) {
 	const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
 	await db.query(DDL);
-	const PL = fs.readFileSync("internal/pl.sql", "utf8");
-	await db.query(PL);
+	const DML = fs.readFileSync("internal/dml.sql", "utf8");
+	await db.query(DML);
 }
 
 
@@ -113,7 +113,7 @@ async function table_delete(db, tablename, primary_key) {
 
 
 module.exports = {
-	send_ddl,
+	send_ddl_dml,
 	reset_database,
 	table_select,
 	table_insert,

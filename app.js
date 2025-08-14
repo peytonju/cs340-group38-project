@@ -142,8 +142,8 @@ app.post("/tables/:db_tablename/insert", async function (req, res) {
 });
 
 
-app.get("/send_ddl", async function (req, res) {
-	await sql_util.send_ddl(db);
+app.get("/send_ddl_dml", async function (req, res) {
+	await sql_util.send_ddl_dml(db);
 	res.status(200).send("ddl sent");
 });
 
