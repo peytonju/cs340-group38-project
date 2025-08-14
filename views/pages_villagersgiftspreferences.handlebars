@@ -8,26 +8,24 @@
   <tbody>
     {{#each VillagersGiftsPreferences}}
       <tr>
-        <form method="post" action="/tables/villagersgiftspreferences/update/">
           <td>
-            <select name="villagerID" required>
-                {{#each ../Villagers}}
-                  <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
-                    ({{villagerID}}) {{villagerName}}
-                  </option>
-                {{/each}}
-              </select>
+            {{#each ../Villagers}}
+              {{#if (eq villagerID ../villagerID)}}
+                ({{villagerID}}) {{villagerName}}
+              {{/if}}
+            {{/each}}
           </td>
 
           <td>
-            <select name="giftID" required>
-                {{#each ../Gifts}}
-                  <option value="{{giftID}}" {{#if (eq giftID ../giftID)}}selected{{/if}}>
-                    ({{giftID}}) {{giftName}}
-                  </option>
-                {{/each}}
-              </select>
+            {{#each ../Gifts}}
+              {{#if (eq giftID ../giftID)}}
+                ({{giftID}}) {{giftName}}
+              {{/if}}
+            {{/each}}
           </td>
+
+
+        <form method="post" action="/tables/villagersgiftspreferences/update/{{villagerID}},{{giftID}}" style="display:inline;">
 
           <td>
             <select name="preference" required>
@@ -36,7 +34,11 @@
               {{/each}}
             </select>
           </td>
+
+          <td><button type="submit">Save</button></td>
         </form>
+
+
 
         <td>
           <form method="post" action="/tables/villagersgiftspreferences/delete/{{villagerID}},{{giftID}}" style="display:inline;">

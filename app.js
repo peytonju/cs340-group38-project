@@ -51,6 +51,7 @@ app.get("/", async function (req, res) {
 	res.status(200).render("pages_root", { resetSuccess });
 });
 
+
 app.get("/tables/:db_tablename", async function (req, res) {
 	const URL_TABLE_NAME = (req.params.db_tablename).toLowerCase();
 	const NEEDED_TABLES = (URL_TABLE_NAME in URL_TABLES) ? URL_TABLES[URL_TABLE_NAME] : null;
@@ -77,15 +78,18 @@ app.get("/tables/:db_tablename", async function (req, res) {
 			handlebar_data["SEASONS"] = SEASONS;
 			handlebar_data["RELATIONSHIP_LEVELS"] = RELATIONSHIP_LEVELS;
 			handlebar_data["GIFT_LIKES"] = GIFT_LIKES;
+			handlebar_data["error"] = req.query.error;
 
 			res.status(200).render(`pages_${URL_TABLE_NAME}`, handlebar_data);
 		} catch (error) {
 			res.status(404).send("Desired table does not exist!");
+			console.log(error);
 		}
 	} else {
 		res.status(404).send("Table specified in the URL does not have a translation!");
 	}
 });
+
 
 /* used by UPDATE and DELETE */
 app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req, res) {
@@ -98,26 +102,24 @@ app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req
 	/* contains attributes that the form specified */
 	const FORM_DATA = req.body;
 
-	if (ACTION === "delete") {
-		await sql_util.table_delete(db, TABLE_NAME, PRIMARY_KEY);
-	} else if (ACTION === "update") {
-		await sql_util.table_update(db, TABLE_NAME, PRIMARY_KEY, FORM_DATA);
+	let database_error = "";
+
+
+	try {
+		if (ACTION === "delete") {
+			await sql_util.table_delete(db, TABLE_NAME, PRIMARY_KEY);
+		} else if (ACTION === "update") {
+			await sql_util.table_update(db, TABLE_NAME, PRIMARY_KEY, FORM_DATA);
+		}
+	} catch (error) {
+		database_error = `?error=${encodeURIComponent(error.message)}`;
 	}
 
-	res.redirect(`/tables/${req.params.db_tablename}`);
+	console.log(database_error);
+
+	res.redirect(`/tables/${req.params.db_tablename}${database_error}`);
 });
 
-/* used by UPDATE for composite-key tables */
-app.post("/tables/:db_tablename/update", async function (req, res) {
-	/* the table's name, translated into its actual SQL name. */
-	const TABLE_NAME = URL_TABLES[(req.params.db_tablename).toLowerCase()].primary;
-	/* contains attributes that the form specified */
-	const FORM_DATA = req.body;
-
-	await sql_util.table_update(db, TABLE_NAME, null, FORM_DATA);
-
-	res.redirect(`/tables/${req.params.db_tablename}`);
-});
 
 /* used by INSERT */
 app.post("/tables/:db_tablename/insert", async function (req, res) {
@@ -126,15 +128,25 @@ app.post("/tables/:db_tablename/insert", async function (req, res) {
 	/* contains attributes that the form specified */
 	const FORM_DATA = req.body;
 
-	await sql_util.table_insert(db, TABLE_NAME, FORM_DATA);
+	let database_error = "";
 
-	res.redirect(`/tables/${req.params.db_tablename}`);
+	try {
+		await sql_util.table_insert(db, TABLE_NAME, FORM_DATA);
+	} catch (error) {
+		database_error = `?error=${encodeURIComponent(error.message)}`;
+	}
+
+	console.log(database_error);
+
+	res.redirect(`/tables/${req.params.db_tablename}${database_error}`);
 });
+
 
 app.get("/send_ddl", async function (req, res) {
 	await sql_util.send_ddl(db);
 	res.status(200).send("ddl sent");
 });
+
 
 app.get("/reset", async function (req, res) {
 	try {

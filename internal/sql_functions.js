@@ -25,9 +25,9 @@ function table_to_pl_mapper(tablename) {
 
 async function send_ddl(db) {
 	const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
-	db.query(DDL);
+	await db.query(DDL);
 	const PL = fs.readFileSync("internal/pl.sql", "utf8");
-	db.query(PL);
+	await db.query(PL);
 }
 
 
@@ -40,7 +40,7 @@ async function reset_database(db) {
 		await db.query(resetProcedureSQL);
 		
 		// Then call the stored procedure to reset the database
-		return await db.query("CALL ResetDatabase();");
+		await db.query("CALL ResetDatabase();");
 	} catch (error) {
 		console.error("Error in reset_database:", error);
 		throw error;
@@ -86,7 +86,7 @@ async function table_insert(db, tablename, form_data) {
 	console.log(`received, \n\ttable name: ${tablename}\n\tform data:`);
 	console.dir(form_data);
 
-	table_call_with_args(db, tablename, null, form_data, "create");
+	await table_call_with_args(db, tablename, null, form_data, "create");
 }
 
 
@@ -95,7 +95,7 @@ async function table_update(db, tablename, primary_key, form_data) {
 	console.log(`received, \n\ttable name: ${tablename}\n\tprimary key: ${primary_key}\n\tform data:`);
 	console.dir(form_data);
 
-	table_call_with_args(db, tablename, primary_key, form_data, "update");
+	await table_call_with_args(db, tablename, primary_key, form_data, "update");
 }
 
 
