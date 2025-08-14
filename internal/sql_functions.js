@@ -1,12 +1,12 @@
 
 /**
- *	------------------ CITATION NOTICE ------------------
+ *	-- ################# CITATION NOTICE #################
  *	-- If any function does NOT list a citation, then it
  *	-- was created originally by either Justice Peyton or
  *	-- Zachary Wilkins-Olson, and in those cases the entire
  *  -- team (Justice Peyton, Zachary Wilkins-Olson) is to
  *  -- be credited.
- *	-----------------------------------------------------
+ *	-- ###################################################
 */
 
 
