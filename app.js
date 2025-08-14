@@ -161,7 +161,7 @@ app.get("/send_ddl_dml", async function (req, res) {
 
 
 /**
- * for reseting the database. See internal/sql_functions.js:reset_database
+ * for reseting the example data. See internal/sql_functions.js:reset_database
  */
 app.get("/reset", async function (req, res) {
 	try {

@@ -299,20 +299,41 @@ END;
 CREATE PROCEDURE update_villager_player_relationship (
 	IN p_playerID int,
 	IN p_villagerID int,
+    IN p_newPlayerID int,
+    IN p_newVillagerID int,
 	IN p_friendshipLevel int
 )
 BEGIN
     DECLARE friendship_level_start int;
 
-	IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
-		SIGNAL SQLSTATE '45000' 
-			SET MESSAGE_TEXT = 'passed villager ID does not exist';
-	END IF;
 
 	IF NOT EXISTS (SELECT 1 FROM Players WHERE playerID = p_playerID) THEN
 		SIGNAL SQLSTATE '45000' 
 			SET MESSAGE_TEXT = 'passed player ID does not exist';
 	END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
+		SIGNAL SQLSTATE '45000' 
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
+	END IF;
+
+	IF NOT EXISTS (SELECT 1 FROM Players WHERE playerID = p_newPlayerID) THEN
+		SIGNAL SQLSTATE '45000' 
+			SET MESSAGE_TEXT = 'passed player ID does not exist';
+	END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_newVillagerID) THEN
+		SIGNAL SQLSTATE '45000' 
+			SET MESSAGE_TEXT = 'passed villager ID does not exist';
+	END IF;
+
+
+    -- update IDs
+    IF p_playerID != p_newPlayerID OR p_villagerID != p_newVillagerID THEN
+        UPDATE PlayersVillagersRelationships
+        SET playerID = p_newPlayerID, villagerID = p_newVillagerID
+        WHERE playerID = p_playerID AND villagerID = p_villagerID;
+    END IF;
 
     IF (p_friendshipLevel) IS NULL THEN
         SET friendship_level_start = 0;
@@ -320,6 +341,7 @@ BEGIN
         SET friendship_level_start = p_friendshipLevel;
     END IF;
 
+    -- update friendship level
     UPDATE PlayersVillagersRelationships
     SET friendshipLevel = p_friendshipLevel
     WHERE playerID = p_playerID AND villagerID = p_villagerID;
@@ -331,6 +353,8 @@ END;
 CREATE PROCEDURE update_villager_gift_preference (
 	IN p_villagerID int,
 	IN p_giftID int,
+    IN p_newVillagerID int,
+    IN p_newGiftID int,
 	IN p_preference varchar(50)
 )
 BEGIN
@@ -343,6 +367,24 @@ BEGIN
 		SIGNAL SQLSTATE '45000'
 			SET MESSAGE_TEXT = 'passed gift ID does not exist';
 	END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_newVillagerID) THEN
+		SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'passed new villager ID does not exist';
+	END IF;
+
+	IF NOT EXISTS (SELECT 1 FROM Gifts WHERE giftID = p_newGiftID) THEN
+		SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'passed new gift ID does not exist';
+	END IF;
+
+
+    -- update IDs
+    IF p_villagerID != p_newVillagerID OR p_giftID != p_newGiftID THEN
+        UPDATE VillagersGiftsPreferences
+        SET villagerID = p_newVillagerID, giftID = p_newGiftID
+        WHERE villagerID = p_villagerID AND giftID = p_giftID;
+    END IF;
 
 	UPDATE VillagersGiftsPreferences
     SET preference = p_preference

@@ -8,23 +8,28 @@
   <tbody>
     {{#each PlayersVillagersRelationships}}
       <tr>
-        <td>
-          {{#each ../Players}}
-            {{#if (eq playerID ../playerID)}}
-              ({{playerID}}) {{playerName}}
-            {{/if}}
-          {{/each}}
-        </td>
-      
-        <td>
-          {{#each ../Villagers}}
-            {{#if (eq villagerID ../villagerID)}}
-            ({{villagerID}}) {{villagerName}}
-            {{/if}}
-          {{/each}}
-        </td>
-
         <form method="post" action="/tables/playersvillagersrelationships/update/{{playerID}},{{villagerID}}" style="display:inline;">
+
+          <td>
+            <select name="playerID" required>
+                {{#each ../Players}}
+                  <option value="{{playerID}}" {{#if (eq playerID ../playerID)}}selected{{/if}}>
+                    ({{playerID}}) {{playerName}}
+                  </option>
+                {{/each}}
+              </select>
+          </td>
+        
+          <td>
+            <select name="villagerID" required>
+                {{#each ../Villagers}}
+                  <option value="{{villagerID}}" {{#if (eq villagerID ../villagerID)}}selected{{/if}}>
+                    ({{villagerID}}) {{villagerName}}
+                  </option>
+                {{/each}}
+              </select>
+          </td>
+
           <td><input name="friendshipLevel" type="number" min="0" max="10" required value="{{friendshipLevel}}"/></td>
 
           <td><button type="submit">Save</button></td>
