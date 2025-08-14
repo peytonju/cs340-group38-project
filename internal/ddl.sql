@@ -1,3 +1,13 @@
+
+-- ################# CITATION NOTICE #################
+-- If any function does NOT list a citation, then it
+-- was created originally by either Justice Peyton or
+-- Zachary Wilkins-Olson, and in those cases the entire
+-- team (Justice Peyton, Zachary Wilkins-Olson) is to
+-- be credited.
+-- ###################################################
+
+
 -- ##################################################
 -- ##### Justice Peyton, Zachary Wilkins-Olson 	#####
 -- ##### CS340                                  #####
@@ -7,16 +17,13 @@
 -- #####             ddl.sql File		 		#####
 -- ##################################################
 
+
 -- ############################################
 -- ##### Brief Description of the project #####
 -- ############################################
 -- This project is a social registry for Stardew Valley, focusing on the relationships between players, villagers, and gifts.
 -- It includes tables for players, farms, villagers, gifts, gift histories, and relationships between players and villagers.
 
-
--- #################################################
--- ############## STARDEW VALLEY DDL ###############
--- #################################################
 
 SET FOREIGN_KEY_CHECKS = 0;
 SET AUTOCOMMIT = 0;
@@ -40,6 +47,7 @@ DROP TABLE IF EXISTS `VillagersGiftsPreferences`;
 -- #################################################
 -- ################# ENTITY TABLES #################
 -- #################################################
+
 
 -- object table
 CREATE TABLE `Players` (
@@ -139,7 +147,7 @@ CREATE TABLE `VillagersGiftsPreferences` (
 
 
 -- ####################################################
--- ################ INSERTION SCRIPTS #################
+-- ################### SAMPLE DATA ####################
 -- ####################################################
 
 -- 1) Players
@@ -176,19 +184,19 @@ INSERT INTO `GiftHistories` (`playerID`,`villagerID`,`giftID`,`givenDate`) VALUE
  ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
   (SELECT giftID FROM Gifts WHERE giftName = 'Coconut'), 
-  '2025-04-14'), -- Ringo → Haley (Coconut on Spring 14)
+  '2025-04-14'), -- Ringo -> Haley (Coconut on Spring 14)
  ((SELECT playerID FROM Players WHERE playerName = 'Ringo'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Haley'), 
   (SELECT giftID FROM Gifts WHERE giftName = 'Pepper Poppers'), 
-  '2025-05-01'), -- Ringo → Haley (Pepper Poppers on 2025‑05‑01)
+  '2025-05-01'), -- Ringo -> Haley (Pepper Poppers on 2025‑05‑01)
  ((SELECT playerID FROM Players WHERE playerName = 'John'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Sebastian'), 
   (SELECT giftID FROM Gifts WHERE giftName = 'Amethyst'), 
-  '2025-12-10'), -- John → Sebastian (Amethyst on Winter 10)
+  '2025-12-10'), -- John -> Sebastian (Amethyst on Winter 10)
  ((SELECT playerID FROM Players WHERE playerName = 'Paul'), 
   (SELECT villagerID FROM Villagers WHERE villagerName = 'Abigail'), 
   (SELECT giftID FROM Gifts WHERE giftName = 'Amethyst'), 
-  '2025-10-13'); -- Paul → Abigail (Amethyst on Fall 13)
+  '2025-10-13'); -- Paul -> Abigail (Amethyst on Fall 13)
 
 -- 6) PlayersVillagersRelationships (Ringo knows two villagers)
 INSERT INTO `PlayersVillagersRelationships`
