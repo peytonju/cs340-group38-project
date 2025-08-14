@@ -1,9 +1,23 @@
+
+/**
+ *	------------------ CITATION NOTICE ------------------
+ *	-- If any function does NOT list a citation, then it
+ *	-- was created originally by either Justice Peyton or
+ *	-- Zachary Wilkins-Olson, and in those cases the entire
+ *  -- team (Justice Peyton, Zachary Wilkins-Olson) is to
+ *  -- be credited.
+ *	-----------------------------------------------------
+*/
+
+
 const fs = require("fs");
 
 /**
  * table_to_pl_mapper - Maps a table name to its corresponding stored procedure prefix.
  * @param {string} tablename - The name of the table to translate.
  * @returns {string|null} - The corresponding stored procedure prefix or null if not found.
+ * 
+ * Created by Justice Peyton
  */
 function table_to_pl_mapper(tablename) {
 	if (tablename) {
@@ -31,6 +45,8 @@ function table_to_pl_mapper(tablename) {
 /**
  * send_ddl_dml - Sends the DDL and DML to the database.
  * @param {Pool} db - The database object to query with.
+ * 
+ * Created by Justice Peyton
  */
 async function send_ddl_dml(db) {
 	try {
@@ -56,6 +72,8 @@ async function send_ddl_dml(db) {
 /**
  * reset_database - Resends the DDL.
  * @param {Pool} db - The database object to query with.
+ * 
+ * Created by Zachary Wilkins-Olson
  */
 async function reset_database(db) {
 	try {
@@ -80,6 +98,8 @@ async function reset_database(db) {
  * @param {string} tablename - The name of the table to select from.
  * @returns {Object} - An object containing two more objects,
  * one contains rows and the other contains the title of the columns.
+ * 
+ * Created by Justice Peyton
  */
 async function table_select(db, tablename) {
 	return await db.query(`SELECT * FROM ${tablename};`);
@@ -93,6 +113,8 @@ async function table_select(db, tablename) {
  * @param {string} primary_key - The primary key of the item to update or insert.
  * @param {Object} form_data - The form data containing the arguments to the stored procedure.
  * @param {string} function_prefix - The prefix for the stored procedure name ("create" or "update").
+ * 
+ * Created by Justice Peyton
  */
 async function table_call_with_args(db, tablename, primary_key, form_data, function_prefix) {
 	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
@@ -127,6 +149,8 @@ async function table_call_with_args(db, tablename, primary_key, form_data, funct
  * @param {Pool} db - The database object to query with.
  * @param {string} tablename - The name of the table to insert into.
  * @param {Object} form_data - The form data containing the arguments to the insert stored procedure.
+ * 
+ * Created by Justice Peyton
  */
 async function table_insert(db, tablename, form_data) {
 	console.log("ran insert");
@@ -144,6 +168,8 @@ async function table_insert(db, tablename, form_data) {
  * @param {string} primary_key - The primary key of the item to update.
  * @param {Object} form_data - The form data containing the arguments to the update stored procedure.
  * NOTE: the order here matters. Please be mindful!
+ * 
+ * Created by Justice Peyton
  */
 async function table_update(db, tablename, primary_key, form_data) {
 	console.log("ran update");
@@ -160,6 +186,8 @@ async function table_update(db, tablename, primary_key, form_data) {
  * @param {string} tablename - The name of the table to delete from.
  * @param {Object} primary_key - The primary key of the item to delete.
  * Can be a comma-separated string of IDs for composite keys.
+ * 
+ * Created by Justice Peyton
  */
 async function table_delete(db, tablename, primary_key) {
 	console.log("ran delete");
@@ -172,7 +200,22 @@ async function table_delete(db, tablename, primary_key) {
 	}
 }
 
-
+/**
+ * 7/28/2025
+ * Understanding the module.exports statement was clarified and adapted by an output from OpenAI's ChatGPT.
+ * The prompt utilized,
+ * 		what is module.exports?
+ * The example code given,
+ * 		function add(a, b) {
+ *  		return a + b;
+ *  	}
+ *		function subtract(a, b) {
+ * 			return a - b;
+ *  	}
+ * 		module.exports = { add, subtract };
+ * 
+ * Created by Justice Peyton with inspiration from OpenAI's ChatGPT
+ */
 
 module.exports = {
 	send_ddl_dml,
