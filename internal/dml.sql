@@ -343,7 +343,7 @@ BEGIN
 
     -- update friendship level
     UPDATE PlayersVillagersRelationships
-    SET friendshipLevel = p_friendshipLevel
+    SET friendshipLevel = LEAST(10, GREATEST(0, p_friendshipLevel))
     WHERE playerID = p_playerID AND villagerID = p_villagerID;
 
     COMMIT;
@@ -448,7 +448,6 @@ BEGIN
     WHERE playerID = p_playerID AND villagerID = p_villagerID;
     COMMIT;
 END;
-
 
 
 CREATE PROCEDURE delete_villager_gift_preference (
