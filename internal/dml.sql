@@ -339,21 +339,14 @@ BEGIN
 
 
     -- update IDs
-    IF p_playerID != p_newPlayerID OR p_villagerID != p_newVillagerID THEN
-        UPDATE PlayersVillagersRelationships
-        SET playerID = p_newPlayerID, villagerID = p_newVillagerID
-        WHERE playerID = p_playerID AND villagerID = p_villagerID;
-    END IF;
-
     IF (p_friendshipLevel) IS NULL THEN
         SET friendship_level_start = 0;
     ELSE
         SET friendship_level_start = p_friendshipLevel;
     END IF;
 
-    -- update friendship level
     UPDATE PlayersVillagersRelationships
-    SET friendshipLevel = LEAST(10, GREATEST(0, p_friendshipLevel))
+    SET playerID = p_newPlayerID, villagerID = p_newVillagerID, friendshipLevel = LEAST(10, GREATEST(0, friendship_level_start))
     WHERE playerID = p_playerID AND villagerID = p_villagerID;
 
     COMMIT;
@@ -389,16 +382,8 @@ BEGIN
 	END IF;
 
 
-    -- update IDs
-    IF p_villagerID != p_newVillagerID OR p_giftID != p_newGiftID THEN
-        UPDATE VillagersGiftsPreferences
-        SET villagerID = p_newVillagerID, giftID = p_newGiftID
-        WHERE villagerID = p_villagerID AND giftID = p_giftID;
-    END IF;
-
-    -- update preference
 	UPDATE VillagersGiftsPreferences
-    SET preference = p_preference
+    SET villagerID = p_newVillagerID, giftID = p_newGiftID, preference = p_preference
     WHERE villagerID = p_villagerID AND giftID = p_giftID;
 
     COMMIT;
