@@ -1,4 +1,23 @@
 
+/**
+ *	------------------ CITATION NOTICE ------------------
+ *	-- If any function does NOT list a citation, then it
+ *	-- was created originally by either Justice Peyton or
+ *	-- Zachary Wilkins-Olson, and in those cases the entire
+ *  -- team (Justice Peyton, Zachary Wilkins-Olson) is to
+ *  -- be credited.
+ *	-----------------------------------------------------
+*/
+
+/**
+ * 7/6/2025
+ * The general Express layout contained in this file is heavily inspired by Dr. Michael
+ * Curry's "Activity 1 - Access and Use the CS340 Database" from the Introduction to
+ * Databases (CS 340) course at Oregon State University, summer 2025.
+ * https://canvas.oregonstate.edu/courses/2007765/assignments/10118864?module_item_id=25664550
+ */
+
+
 /**************************************************************************** SETUP */
 /************ REQUIRES */
 const express = require("express");
@@ -44,9 +63,10 @@ app.use(express.urlencoded({
 
 
 /**************************************************************************** ROUTES */
-
 /**
  * for the root page. See views/pages_root.handlebars
+ * 
+ * Created by Justice Peyton and Zachary Wilkins-Olson
  */
 app.get("/", async function (req, res) {
 	const resetSuccess = req.query.reset === 'success';
@@ -56,6 +76,8 @@ app.get("/", async function (req, res) {
 
 /**
  * for displaying a table. See internal/sql_functions.js:table_select
+ * 
+ * Created by Justice Peyton
  */
 app.get("/tables/:db_tablename", async function (req, res) {
 	const URL_TABLE_NAME = (req.params.db_tablename).toLowerCase();
@@ -98,6 +120,8 @@ app.get("/tables/:db_tablename", async function (req, res) {
 
 /**
  * for deleting or updating a row in a table. See internal/sql_functions.js:table_delete and internal/sql_functions.js:table_update
+ * 
+ * Created by Justice Peyton
  */
 app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req, res) {
 	/* the table's name, translated into its actual SQL name. */
@@ -130,6 +154,8 @@ app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req
 
 /**
  * for inserting a row into a table. See internal/sql_functions.js:table_insert
+ * 
+ * Created by Justice Peyton
  */
 app.post("/tables/:db_tablename/insert", async function (req, res) {
 	/* the table's name, translated into its actual SQL name. */
@@ -153,6 +179,8 @@ app.post("/tables/:db_tablename/insert", async function (req, res) {
 
 /**
  * for reseting the data and the DML procedures in the database. See internal/sql_functions.js:send_ddl_dml
+ * 
+ * Created by Justice Peyton
  */
 app.get("/send_ddl_dml", async function (req, res) {
 	await sql_util.send_ddl_dml(db);
@@ -162,6 +190,8 @@ app.get("/send_ddl_dml", async function (req, res) {
 
 /**
  * for reseting the example data. See internal/sql_functions.js:reset_database
+ * 
+ * Created by Zachary Wilkins-Olson
  */
 app.get("/reset", async function (req, res) {
 	try {
@@ -175,6 +205,15 @@ app.get("/reset", async function (req, res) {
 
 
 /**************************************************************************** LISTENER */
+/**
+ * for listening on a specific port.
+ * 
+ * 7/6/2025
+ * The following function was copied from "Activity 1 - Access and Use the CS340 Database"
+ * from Dr. Michael Curry's Introduction to Databases (CS340) course at Oregon State
+ * University, summer 2025.
+ * https://canvas.oregonstate.edu/courses/2007765/assignments/10118864?module_item_id=25664550
+ */
 app.listen(PORT, function() {
     console.log("Express started on http://localhost:" + PORT + "; press Ctrl-C to terminate.");
 });
