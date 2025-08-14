@@ -327,12 +327,14 @@ END;
 
 
 CREATE PROCEDURE create_gift_history (
+    IN p_givenDate datetime,
     IN p_playerID int,
     IN p_villagerID int,
     IN p_giftID int
 )
 BEGIN
-    DECLARE gift_value_multiplier int;
+    DECLARE amount_to_increase_by int;
+    DECLARE villager_preference varchar(50);
 
 	IF NOT EXISTS (SELECT 1 FROM Villagers WHERE villagerID = p_villagerID) THEN
 		SIGNAL SQLSTATE '45000'
@@ -345,9 +347,48 @@ BEGIN
 	END IF;
 
     INSERT INTO GiftHistories (playerID, villagerID, giftID, givenDate)
-    VALUES (p_playerID, p_villagerID, p_giftID, NOW());
+    VALUES (p_playerID, p_villagerID, p_giftID, p_givenDate);
 
-    -- TODO: update relationship and friendship value
+    -- get the amount to increase by
+    IF EXISTS (SELECT 1 FROM VillagersGiftsPreferences
+                WHERE villagerID = p_villagerID AND giftID = p_giftID) THEN
+
+        SELECT preference INTO villager_preference
+        FROM VillagersGiftsPreferences
+        WHERE villagerID = p_villagerID AND giftID = p_giftID;
+
+        -- determine the amount to increase by
+        IF villager_preference = 'love' THEN
+            SET amount_to_increase_by = 2;
+        ELSEIF villager_preference = 'like' THEN
+            SET amount_to_increase_by = 1;
+        ELSEIF villager_preference = 'neutral' THEN
+            SET amount_to_increase_by = 0;
+        ELSEIF villager_preference = 'dislike' THEN
+            SET amount_to_increase_by = -1;
+        ELSEIF villager_preference = 'hate' THEN
+            SET amount_to_increase_by = -2;
+        END IF;
+
+    ELSE
+        -- create a neutral preference
+        INSERT INTO VillagersGiftsPreferences (villagerID, giftID, preference)
+        VALUES (p_villagerID, p_giftID, 'neutral');
+
+        SET amount_to_increase_by = 0;
+    END IF;
+
+    -- improve their relationship
+    IF EXISTS (SELECT 1 FROM PlayersVillagersRelationships
+                WHERE playerID = p_playerID AND villagerID = p_villagerID) THEN
+
+        UPDATE PlayersVillagersRelationships
+        SET friendshipLevel = LEAST(10, GREATEST(0, friendshipLevel + amount_to_increase_by))
+        WHERE playerID = p_playerID AND villagerID = p_villagerID;
+    ELSE
+        INSERT INTO PlayersVillagersRelationships (playerID, villagerID, friendshipLevel)
+        VALUES (p_playerID, p_villagerID, LEAST(10, GREATEST(0, amount_to_increase_by)));
+    END IF;
 
     COMMIT;
 END;
