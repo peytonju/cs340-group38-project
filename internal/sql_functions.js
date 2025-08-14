@@ -33,10 +33,23 @@ function table_to_pl_mapper(tablename) {
  * @param {Pool} db - The database object to query with.
  */
 async function send_ddl_dml(db) {
-	const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
-	await db.query(DDL);
-	const DML = fs.readFileSync("internal/dml.sql", "utf8");
-	await db.query(DML);
+	try {
+		const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
+		await db.query(DDL);
+		console.log("send_ddl_dml: DDL loaded successfully.");
+	} catch (err) {
+		console.error("send_ddl_dml: Failed to load DDL:", err.message || err);
+		throw err;
+	}
+
+	try {
+		const DML = fs.readFileSync("internal/dml.sql", "utf8");
+		await db.query(DML);
+		console.log("send_ddl_dml: DML loaded successfully.");
+	} catch (err) {
+		console.error("send_ddl_dml: Failed to load DML:", err.message || err);
+		throw err;
+	}
 }
 
 
