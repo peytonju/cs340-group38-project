@@ -200,6 +200,7 @@ async function table_delete(db, tablename, primary_key) {
 	}
 }
 
+
 /**
  * 7/28/2025
  * Understanding the module.exports statement was clarified and adapted by an output from OpenAI's ChatGPT.
@@ -216,7 +217,6 @@ async function table_delete(db, tablename, primary_key) {
  * 
  * Created by Justice Peyton with inspiration from OpenAI's ChatGPT
  */
-
 module.exports = {
 	send_ddl_dml,
 	reset_database,
@@ -225,4 +225,3 @@ module.exports = {
 	table_update,
 	table_delete
 };
-
