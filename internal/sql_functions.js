@@ -1,5 +1,10 @@
 const fs = require("fs");
 
+/**
+ * table_to_pl_mapper - Maps a table name to its corresponding stored procedure prefix.
+ * @param {string} tablename - The name of the table to translate.
+ * @returns {string|null} - The corresponding stored procedure prefix or null if not found.
+ */
 function table_to_pl_mapper(tablename) {
 	if (tablename) {
 		switch (tablename) {
@@ -23,6 +28,10 @@ function table_to_pl_mapper(tablename) {
 }
 
 
+/**
+ * send_ddl_dml - Sends the DDL and DML to the database.
+ * @param {Pool} db - The database object to query with.
+ */
 async function send_ddl_dml(db) {
 	const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
 	await db.query(DDL);
@@ -31,6 +40,10 @@ async function send_ddl_dml(db) {
 }
 
 
+/**
+ * reset_database - Resends the DDL.
+ * @param {Pool} db - The database object to query with.
+ */
 async function reset_database(db) {
 	try {
 		// Read the stored procedure file
@@ -48,11 +61,26 @@ async function reset_database(db) {
 }
 
 
+/**
+ * table_select - Selects all rows from a table.
+ * @param {Pool} db - The database object to query with.
+ * @param {string} tablename - The name of the table to select from.
+ * @returns {Object} - An object containing two more objects,
+ * one contains rows and the other contains the title of the columns.
+ */
 async function table_select(db, tablename) {
 	return await db.query(`SELECT * FROM ${tablename};`);
 }
 
 
+/**
+ * table_call_with_args - Calls a stored procedure that has more than just the primary key as an argument.
+ * @param {Pool} db - The database object to query with.
+ * @param {string} tablename - The name of the table to call the procedure for.
+ * @param {string} primary_key - The primary key of the item to update or insert.
+ * @param {Object} form_data - The form data containing the arguments to the stored procedure.
+ * @param {string} function_prefix - The prefix for the stored procedure name ("create" or "update").
+ */
 async function table_call_with_args(db, tablename, primary_key, form_data, function_prefix) {
 	const PROCEDURE_NAME = table_to_pl_mapper(tablename);
 
@@ -81,6 +109,12 @@ async function table_call_with_args(db, tablename, primary_key, form_data, funct
 }
 
 
+/**
+ * table_isnert - Inserts a row into some table.
+ * @param {Pool} db - The database object to query with.
+ * @param {string} tablename - The name of the table to insert into.
+ * @param {Object} form_data - The form data containing the arguments to the insert stored procedure.
+ */
 async function table_insert(db, tablename, form_data) {
 	console.log("ran insert");
 	console.log(`received, \n\ttable name: ${tablename}\n\tform data:`);
@@ -90,6 +124,14 @@ async function table_insert(db, tablename, form_data) {
 }
 
 
+/**
+ * table_update - Updates a row in some table.
+ * @param {Pool} db - The database object to query with.
+ * @param {string} tablename - The name of the table to update.
+ * @param {string} primary_key - The primary key of the item to update.
+ * @param {Object} form_data - The form data containing the arguments to the update stored procedure.
+ * NOTE: the order here matters. Please be mindful!
+ */
 async function table_update(db, tablename, primary_key, form_data) {
 	console.log("ran update");
 	console.log(`received, \n\ttable name: ${tablename}\n\tprimary key: ${primary_key}\n\tform data:`);
@@ -99,6 +141,13 @@ async function table_update(db, tablename, primary_key, form_data) {
 }
 
 
+/**
+ * table_delete - Deletes a row from some table.
+ * @param {Pool} db - The database object to query with.
+ * @param {string} tablename - The name of the table to delete from.
+ * @param {Object} primary_key - The primary key of the item to delete.
+ * Can be a comma-separated string of IDs for composite keys.
+ */
 async function table_delete(db, tablename, primary_key) {
 	console.log("ran delete");
 	console.log(`received, \n\ttable name: ${tablename}\n\tprimary key: ${primary_key}`);

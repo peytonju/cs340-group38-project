@@ -1,34 +1,18 @@
 
 /**************************************************************************** SETUP */
-/* REQUIRES */
+/************ REQUIRES */
 const express = require("express");
 const express_handlebars = require("express-handlebars");
 const path = require("path")
 const sql_util = require("./internal/sql_functions");
 const { helpers } = require("./helpers/hbs");
 
-/* CONSTANTS */
+/************ CONSTANTS */
 const app = express(); /* express app */
 const db = require("./internal/database_connection_details"); /* database. send queries here. */
 const PORT = 41394; /* port this express server will be hosted on. */
 
-
-/* HANDLEBARS SETUP */
-app.engine("handlebars", express_handlebars.engine({
-	/* as specified by layouts/index.handlebars */
-	defaultLayout: "layouts_index",
-	partialsDir: path.join(__dirname, "views", "partials"),
-	helpers
-}));
-app.set("view engine", "handlebars");
-app.set()
-app.use(express.static("public"));
-app.use(express.urlencoded({
-	extended: true
-}));
-
-
-/* contains relevant tables needed for a specific URL path on our site. */
+/* maps a URL to the tables that that URL requires in order to be displayed. essentially table dependencies for a URL. */
 const URL_TABLES = {
 	"players": {primary: "Players", additional: null},
 	"villagers": {primary: "Villagers", additional: ["Farms"]},
@@ -44,14 +28,35 @@ const SEASONS = ["Spring", "Summer", "Fall", "Winter"];
 const RELATIONSHIP_LEVELS = ["acquaintance", "friend", "spouse"];
 const GIFT_LIKES = ["love", "like", "neutral", "dislike", "hate"];
 
+/************ HANDLEBARS SETUP */
+app.engine("handlebars", express_handlebars.engine({
+	/* as specified by layouts/index.handlebars */
+	defaultLayout: "layouts_index",
+	partialsDir: path.join(__dirname, "views", "partials"),
+	helpers
+}));
+app.set("view engine", "handlebars");
+app.set()
+app.use(express.static("public"));
+app.use(express.urlencoded({
+	extended: true
+}));
+
 
 /**************************************************************************** ROUTES */
+
+/**
+ * for the root page. See views/pages_root.handlebars
+ */
 app.get("/", async function (req, res) {
 	const resetSuccess = req.query.reset === 'success';
 	res.status(200).render("pages_root", { resetSuccess });
 });
 
 
+/**
+ * for displaying a table. See internal/sql_functions.js:table_select
+ */
 app.get("/tables/:db_tablename", async function (req, res) {
 	const URL_TABLE_NAME = (req.params.db_tablename).toLowerCase();
 	const NEEDED_TABLES = (URL_TABLE_NAME in URL_TABLES) ? URL_TABLES[URL_TABLE_NAME] : null;
@@ -91,7 +96,9 @@ app.get("/tables/:db_tablename", async function (req, res) {
 });
 
 
-/* used by UPDATE and DELETE */
+/**
+ * for deleting or updating a row in a table. See internal/sql_functions.js:table_delete and internal/sql_functions.js:table_update
+ */
 app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req, res) {
 	/* the table's name, translated into its actual SQL name. */
 	const TABLE_NAME = URL_TABLES[(req.params.db_tablename).toLowerCase()].primary;
@@ -121,7 +128,9 @@ app.post("/tables/:db_tablename/:db_action/:db_primary_key", async function (req
 });
 
 
-/* used by INSERT */
+/**
+ * for inserting a row into a table. See internal/sql_functions.js:table_insert
+ */
 app.post("/tables/:db_tablename/insert", async function (req, res) {
 	/* the table's name, translated into its actual SQL name. */
 	const TABLE_NAME = URL_TABLES[(req.params.db_tablename).toLowerCase()].primary;
@@ -142,12 +151,18 @@ app.post("/tables/:db_tablename/insert", async function (req, res) {
 });
 
 
+/**
+ * for reseting the data and the DML procedures in the database. See internal/sql_functions.js:send_ddl_dml
+ */
 app.get("/send_ddl_dml", async function (req, res) {
 	await sql_util.send_ddl_dml(db);
 	res.status(200).send("ddl sent");
 });
 
 
+/**
+ * for reseting the database. See internal/sql_functions.js:reset_database
+ */
 app.get("/reset", async function (req, res) {
 	try {
 		await sql_util.reset_database(db);
