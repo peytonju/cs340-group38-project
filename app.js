@@ -178,13 +178,13 @@ app.post("/tables/:db_tablename/insert", async function (req, res) {
 
 
 /**
- * for reseting the data and the DML procedures in the database. See internal/sql_functions.js:send_ddl_dml
+ * for reseting the data and the DML procedures in the database. See internal/sql_functions.js:send_ddl_pl
  * 
  * Created by Justice Peyton
  */
-app.get("/send_ddl_dml", async function (req, res) {
-	await sql_util.send_ddl_dml(db);
-	res.status(200).send("ddl sent");
+app.get("/send_ddl_pl", async function (req, res) {
+	await sql_util.send_ddl_pl(db);
+	res.status(200).send("ddl and pl sent");
 });
 
 

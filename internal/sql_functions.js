@@ -43,27 +43,27 @@ function table_to_pl_mapper(tablename) {
 
 
 /**
- * send_ddl_dml - Sends the DDL and DML to the database.
+ * send_ddl_pl - Sends the DDL and DML to the database.
  * @param {Pool} db - The database object to query with.
  * 
  * Created by Justice Peyton
  */
-async function send_ddl_dml(db) {
+async function send_ddl_pl(db) {
 	try {
 		const DDL = fs.readFileSync("internal/ddl.sql", "utf8");
 		await db.query(DDL);
-		console.log("send_ddl_dml: DDL loaded successfully.");
+		console.log("send_ddl_pl: DDL loaded successfully.");
 	} catch (err) {
-		console.error("send_ddl_dml: Failed to load DDL:", err.message || err);
+		console.error("send_ddl_pl: Failed to load DDL:", err.message || err);
 		throw err;
 	}
 
 	try {
-		const DML = fs.readFileSync("internal/dml.sql", "utf8");
-		await db.query(DML);
-		console.log("send_ddl_dml: DML loaded successfully.");
+		const PL = fs.readFileSync("internal/pl.sql", "utf8");
+		await db.query(PL);
+		console.log("send_ddl_pl: PL loaded successfully.");
 	} catch (err) {
-		console.error("send_ddl_dml: Failed to load DML:", err.message || err);
+		console.error("send_ddl_pl: Failed to load PL:", err.message || err);
 		throw err;
 	}
 }
@@ -218,7 +218,7 @@ async function table_delete(db, tablename, primary_key) {
  * Created by Justice Peyton with inspiration from OpenAI's ChatGPT
  */
 module.exports = {
-	send_ddl_dml,
+	send_ddl_pl,
 	reset_database,
 	table_select,
 	table_insert,
