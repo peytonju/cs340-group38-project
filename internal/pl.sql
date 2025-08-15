@@ -20,7 +20,18 @@
 -- Drop the procedure if it exists
 DROP PROCEDURE IF EXISTS ResetDatabase;
 
--- Create the stored procedure (Node.js compatible - no DELIMITER needed)
+-- Created by Zachary Wilkins-Olson with inspiration from Stardew Valley and Activity 4 of CS340
+-- 
+-- 7/23/2025
+-- All tables created were created with inspiration from "Activity 4 - Creating a Customer Object Table"
+-- from Dr. Michael Curry's Introduction to Databases (CS340) course at Oregon State
+-- University, summer 2025.
+-- https://canvas.oregonstate.edu/courses/2007765/pages/activity-4-creating-a-customer-object-table?module_item_id=25664579
+-- 
+-- 7/31/2025
+-- All sample data was created by Zachary Wilkins-Olson with inspiration from Stardew Valley's game lore and characters
+-- created by Eric "ConcernedApe" Barone.
+-- https://www.stardewvalley.net/
 CREATE PROCEDURE ResetDatabase()
 BEGIN
     -- Disable foreign key checks and autocommit
