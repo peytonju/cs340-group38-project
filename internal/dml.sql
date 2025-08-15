@@ -47,6 +47,10 @@ DROP PROCEDURE IF EXISTS delete_villager_player_relationship;
 -- #################################################
 -- #################### CREATE #####################
 -- #################################################
+
+
+-- for creating players.
+-- Created by Justice Peyton
 CREATE PROCEDURE create_player (
 	IN p_playerName varchar(100)
 )
@@ -57,6 +61,8 @@ BEGIN
 END;
 
 
+-- for creating villagers.
+-- Created by Justice Peyton
 CREATE PROCEDURE create_villager (
 	IN p_villagerName varchar(100),
 	IN p_birthdaySeason varchar(10),
@@ -78,6 +84,8 @@ BEGIN
 END;
 
 
+-- for creating farms.
+-- Created by Justice Peyton
 CREATE PROCEDURE create_farm (
 	IN p_playerID int,
 	IN p_farmName varchar(100),
@@ -90,6 +98,8 @@ BEGIN
 END;
 
 
+-- for creating gifts.
+-- Created by Justice Peyton
 CREATE PROCEDURE create_gift (
 	IN p_giftName varchar(100),
 	IN p_value decimal(8,2),
@@ -102,6 +112,8 @@ BEGIN
 END;
 
 
+-- for creating villager-gift preferences.
+-- Created by Justice Peyton
 CREATE PROCEDURE create_villager_player_relationship (
 	IN p_playerID int,
 	IN p_villagerID int,
@@ -132,6 +144,8 @@ BEGIN
 END;
 
 
+-- for creating villager-gift preferences.
+-- Created by Justice Peyton
 CREATE PROCEDURE create_villager_gift_preference (
 	IN p_villagerID int,
 	IN p_giftID int,
@@ -154,6 +168,8 @@ BEGIN
 END;
 
 
+-- for creating gift histories.
+-- Created by Justice Peyton
 CREATE PROCEDURE create_gift_history (
     IN p_givenDate datetime,
     IN p_playerID int,
@@ -225,6 +241,8 @@ END;
 -- #################################################
 -- #################### UPDATE #####################
 -- #################################################
+-- for updating players.
+-- Created by Justice Peyton
 CREATE PROCEDURE update_player (
     IN p_playerID int,
     IN p_playerName varchar(100)
@@ -243,6 +261,8 @@ BEGIN
 END;
 
 
+-- for updating gifts.
+-- Created by Justice Peyton
 CREATE PROCEDURE update_gift (
     IN p_giftID int,
     IN p_giftName varchar(100),
@@ -263,6 +283,8 @@ BEGIN
 END;
 
 
+-- for updating farms.
+-- Created by Justice Peyton
 CREATE PROCEDURE update_farm (
     IN p_farmID int,
 	IN p_playerID int,
@@ -277,6 +299,8 @@ BEGIN
 END;
 
 
+-- for updating villagers.
+-- Created by Justice Peyton
 CREATE PROCEDURE update_villager (
     IN p_villagerID int,
 	IN p_villagerName varchar(100),
@@ -306,6 +330,8 @@ BEGIN
 END;
 
 
+-- for updating villager-player relationships.
+-- Created by Justice Peyton
 CREATE PROCEDURE update_villager_player_relationship (
 	IN p_playerID int,
 	IN p_villagerID int,
@@ -338,9 +364,10 @@ BEGIN
 	END IF;
 
 
-    -- update IDs
+    -- if no friendship level was passed, just set it to 0.
     IF (p_friendshipLevel) IS NULL THEN
         SET friendship_level_start = 0;
+    -- otherwise, set it to the passed friendship level.
     ELSE
         SET friendship_level_start = p_friendshipLevel;
     END IF;
@@ -353,6 +380,8 @@ BEGIN
 END;
 
 
+-- for updating villager-gift preferences.
+-- Created by Justice Peyton
 CREATE PROCEDURE update_villager_gift_preference (
 	IN p_villagerID int,
 	IN p_giftID int,
@@ -394,6 +423,8 @@ END;
 -- #################################################
 -- #################### DELETE #####################
 -- #################################################
+-- for deleting players.
+-- Created by Justice Peyton
 CREATE PROCEDURE delete_player (
     IN p_playerID int
 )
@@ -404,6 +435,8 @@ BEGIN
 END;
 
 
+-- for deleting villagers.
+-- Created by Justice Peyton
 CREATE PROCEDURE delete_villager (
     IN p_villagerID int
 )
@@ -414,6 +447,8 @@ BEGIN
 END;
 
 
+-- for deleting farms.
+-- Created by Justice Peyton
 CREATE PROCEDURE delete_farm (
     IN p_farmID int
 )
@@ -424,6 +459,8 @@ BEGIN
 END;
 
 
+-- for deleting gifts.
+-- Created by Justice Peyton
 CREATE PROCEDURE delete_gift (
     IN p_giftID int
 )
@@ -434,6 +471,8 @@ BEGIN
 END;
 
 
+-- for deleting villager-player relationships.
+-- Created by Justice Peyton
 CREATE PROCEDURE delete_villager_player_relationship (
 	IN p_playerID int,
 	IN p_villagerID int
@@ -445,6 +484,8 @@ BEGIN
 END;
 
 
+-- for deleting villager-gift preferences.
+-- Created by Justice Peyton
 CREATE PROCEDURE delete_villager_gift_preference (
     IN p_villagerID int,
     IN p_giftID int
