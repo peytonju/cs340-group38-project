@@ -49,6 +49,12 @@ DROP TABLE IF EXISTS `VillagersGiftsPreferences`;
 -- #################################################
 
 
+-- 7/23/2025
+-- All tables created were created with inspiration from "Activity 4 - Creating a Customer Object Table"
+-- from Dr. Michael Curry's Introduction to Databases (CS340) course at Oregon State
+-- University, summer 2025.
+-- https://canvas.oregonstate.edu/courses/2007765/pages/activity-4-creating-a-customer-object-table?module_item_id=25664579
+
 -- object table
 CREATE TABLE `Players` (
 	-- attributes
@@ -149,6 +155,11 @@ CREATE TABLE `VillagersGiftsPreferences` (
 -- ####################################################
 -- ################### SAMPLE DATA ####################
 -- ####################################################
+
+-- 7/31/2025
+-- All sample data was created by Zachary Wilkins-Olson with inspiration from Stardew Valley's game lore and characters
+-- created by Eric "ConcernedApe" Barone.
+-- https://www.stardewvalley.net/
 
 -- 1) Players
 INSERT INTO `Players` (`playerID`, `playerName`) VALUES
